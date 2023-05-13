@@ -1,0 +1,249 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <Name>VuejsMoreSegment</Name>
+    <RootNamespace>VuejsMoreSegment</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>ecdc09e1-590f-4ff1-b27e-6c488cd10ac3</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>node_modules\@vue\cli-service\bin\vue-cli-service.js</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <NodejsPort>1337</NodejsPort>
+    <StartWebBrowser>true</StartWebBrowser>
+    <ScriptArguments>serve</ScriptArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include=".eslinttrc.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="public\favicon.ico" />
+    <Content Include="public\index.html" />
+    <Content Include="public\webhqchart.demo\demo\content\css\change-color.css" />
+    <Content Include="public\webhqchart.demo\demo\content\css\panel-set.css" />
+    <Content Include="public\webhqchart.demo\demo\content\css\phone12.tools.css" />
+    <Content Include="public\webhqchart.demo\demo\content\css\phone13.tools.css" />
+    <Content Include="public\webhqchart.demo\demo\content\css\phone14.tools.css" />
+    <Content Include="public\webhqchart.demo\demo\content\css\phone15.tools.css" />
+    <Content Include="public\webhqchart.demo\demo\content\css\phone16.tools.css" />
+    <Content Include="public\webhqchart.demo\demo\content\css\phone20.tools.css" />
+    <Content Include="public\webhqchart.demo\demo\content\css\phone7.tools.css" />
+    <Content Include="public\webhqchart.demo\demo\content\css\tools.css" />
+    <Content Include="public\webhqchart.demo\demo\content\font\demo.css" />
+    <Content Include="public\webhqchart.demo\demo\content\font\demo_fontclass.html" />
+    <Content Include="public\webhqchart.demo\demo\content\font\demo_symbol.html" />
+    <Content Include="public\webhqchart.demo\demo\content\font\demo_unicode.html" />
+    <Content Include="public\webhqchart.demo\demo\content\font\iconfont.css" />
+    <Content Include="public\webhqchart.demo\demo\content\font\iconfont.eot" />
+    <Content Include="public\webhqchart.demo\demo\content\font\iconfont.js" />
+    <Content Include="public\webhqchart.demo\demo\content\font\iconfont.svg" />
+    <Content Include="public\webhqchart.demo\demo\content\font\iconfont.ttf" />
+    <Content Include="public\webhqchart.demo\demo\content\font\iconfont.woff" />
+    <Content Include="public\webhqchart.demo\demo\content\font\iconfont_close.css" />
+    <Content Include="public\webhqchart.demo\demo\content\image\bar0-1.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\bar0.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\change-color.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\del-single.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-arc.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-beam.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-circle.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-delete.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-gannfan.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-goldensection.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-hline.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-parallelchannel.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-parallellines.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-percentage.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-pricechannel.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-rect.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-resline.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-segment.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-symangle.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-text.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-trendline.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-triangle.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\icon-waveband.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\pie0-2.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\pie0-3.png" />
+    <Content Include="public\webhqchart.demo\demo\content\image\pie0.png" />
+    <Content Include="public\webhqchart.demo\demo\content\js\jquery.min.js" />
+    <Content Include="public\webhqchart.demo\demo\content\js\phone11.tools.js" />
+    <Content Include="public\webhqchart.demo\demo\content\js\phone12.tools.js" />
+    <Content Include="public\webhqchart.demo\demo\content\js\phone13.tools.js" />
+    <Content Include="public\webhqchart.demo\demo\content\js\phone15.tools.js" />
+    <Content Include="public\webhqchart.demo\demo\content\js\phone7.tools.js" />
+    <Content Include="public\webhqchart.demo\demo\content\js\polyfill.min.js" />
+    <Content Include="public\webhqchart.demo\demo\content\js\tools.js" />
+    <Content Include="public\webhqchart.demo\demo\content\js\Tween.js" />
+    <Content Include="public\webhqchart.demo\demo\content\js\vue-resource.js" />
+    <Content Include="public\webhqchart.demo\demo\content\js\vue.js" />
+    <Content Include="public\webhqchart.demo\demo\content\js\webfont.js" />
+    <Content Include="public\webhqchart.demo\demo\et_minute.html" />
+    <Content Include="public\webhqchart.demo\demo\et_testdata.js" />
+    <Content Include="public\webhqchart.demo\demo\HSIML_demo.html" />
+    <Content Include="public\webhqchart.demo\demo\HSIML_minute_testdata.js" />
+    <Content Include="public\webhqchart.demo\demo\jsmind_test.html" />
+    <Content Include="public\webhqchart.demo\demo\minute_index_demo.html" />
+    <Content Include="public\webhqchart.demo\demo\plugins\bootstrap\bootstrap.min.css" />
+    <Content Include="public\webhqchart.demo\demo\plugins\bootstrap\bootstrap.min.js" />
+    <Content Include="public\webhqchart.demo\demo\plugins\bootstrap\custom.min.css" />
+    <Content Include="public\webhqchart.demo\demo\plugins\code_color\codemirror.css" />
+    <Content Include="public\webhqchart.demo\demo\plugins\code_color\codemirror.js" />
+    <Content Include="public\webhqchart.demo\demo\plugins\code_color\javascript.js" />
+    <Content Include="public\webhqchart.demo\demo\plugins\cross.js" />
+    <Content Include="public\webhqchart.demo\demo\plugins\datepicker\bootstrap-datepicker.js" />
+    <Content Include="public\webhqchart.demo\demo\plugins\datepicker\bootstrap-datepicker.zh-CN.js" />
+    <Content Include="public\webhqchart.demo\demo\plugins\datepicker\bootstrap-datepicker3.min.css" />
+    <Content Include="public\webhqchart.demo\demo\plugins\layer3.0\layer.js" />
+    <Content Include="public\webhqchart.demo\demo\plugins\layer3.0\mobile\layer.js" />
+    <Content Include="public\webhqchart.demo\demo\plugins\layer3.0\mobile\need\layer.css" />
+    <Content Include="public\webhqchart.demo\demo\plugins\layer3.0\skin\default\icon-ext.png" />
+    <Content Include="public\webhqchart.demo\demo\plugins\layer3.0\skin\default\icon.png" />
+    <Content Include="public\webhqchart.demo\demo\plugins\layer3.0\skin\default\layer.css" />
+    <Content Include="public\webhqchart.demo\demo\plugins\layer3.0\skin\default\loading-0.gif" />
+    <Content Include="public\webhqchart.demo\demo\plugins\layer3.0\skin\default\loading-1.gif" />
+    <Content Include="public\webhqchart.demo\demo\plugins\layer3.0\skin\default\loading-2.gif" />
+    <Content Include="public\webhqchart.demo\demo\RXZT.html" />
+    <Content Include="public\webhqchart.demo\demo\sectiondatatest.html" />
+    <Content Include="public\webhqchart.demo\demo\ws_minute_demo.html" />
+    <Content Include="public\webhqchart.demo\h5demo\css\iosSelect.css" />
+    <Content Include="public\webhqchart.demo\h5demo\css\selectDetail.css" />
+    <Content Include="public\webhqchart.demo\h5demo\images\caiW.png" />
+    <Content Include="public\webhqchart.demo\h5demo\images\gongg.png" />
+    <Content Include="public\webhqchart.demo\h5demo\images\shrink_icon.png" />
+    <Content Include="public\webhqchart.demo\h5demo\images\yearB.png" />
+    <Content Include="public\webhqchart.demo\h5demo\js\iosSelect.js" />
+    <Content Include="public\webhqchart.demo\h5demo\js\selectDetail.js" />
+    <Content Include="public\webhqchart.demo\h5demo\js\stockScreen.js" />
+    <Content Include="public\webhqchart.demo\h5demo\js\umychart.news.js" />
+    <Content Include="public\webhqchart.demo\h5demo\stockpage.html" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.complier.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.console.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.deal.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.index.data.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.network.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.news.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.regressiontest.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.report.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\css\python_demo.css" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\css\readme.txt" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\css\tools.css" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\font\brushSymbol.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\font\fontSymbol.css" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\font\fontSymbol.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\font\iconfont.css" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\font\iconfont.ttf" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\font\iconfont.woff" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\font\iconfont.woff2" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\font\readme.txt" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\js\codemirror\javascript.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\js\jquery.min.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\js\python_demo.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.resource\js\webfont.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.stock.js" />
+    <Content Include="public\webhqchart.demo\jscommon\umychart.style.js" />
+    <Content Include="public\webhqchart.demo\readme.txt" />
+    <Content Include="src\components\App.vue" />
+    <Content Include="src\components\Home.vue" />
+    <Content Include="package.json" />
+    <Content Include="README.md" />
+    <Content Include="web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="dist\" />
+    <Folder Include="public\" />
+    <Folder Include="public\webhqchart.demo\" />
+    <Folder Include="public\webhqchart.demo\demo\" />
+    <Folder Include="public\webhqchart.demo\demo\content\" />
+    <Folder Include="public\webhqchart.demo\demo\content\css\" />
+    <Folder Include="public\webhqchart.demo\demo\content\font\" />
+    <Folder Include="public\webhqchart.demo\demo\content\image\" />
+    <Folder Include="public\webhqchart.demo\demo\content\js\" />
+    <Folder Include="public\webhqchart.demo\demo\plugins\" />
+    <Folder Include="public\webhqchart.demo\demo\plugins\bootstrap\" />
+    <Folder Include="public\webhqchart.demo\demo\plugins\code_color\" />
+    <Folder Include="public\webhqchart.demo\demo\plugins\datepicker\" />
+    <Folder Include="public\webhqchart.demo\demo\plugins\layer3.0\" />
+    <Folder Include="public\webhqchart.demo\demo\plugins\layer3.0\mobile\" />
+    <Folder Include="public\webhqchart.demo\demo\plugins\layer3.0\mobile\need\" />
+    <Folder Include="public\webhqchart.demo\demo\plugins\layer3.0\skin\" />
+    <Folder Include="public\webhqchart.demo\demo\plugins\layer3.0\skin\default\" />
+    <Folder Include="public\webhqchart.demo\h5demo\" />
+    <Folder Include="public\webhqchart.demo\h5demo\css\" />
+    <Folder Include="public\webhqchart.demo\h5demo\images\" />
+    <Folder Include="public\webhqchart.demo\h5demo\js\" />
+    <Folder Include="public\webhqchart.demo\jscommon\" />
+    <Folder Include="public\webhqchart.demo\jscommon\umychart.resource\" />
+    <Folder Include="public\webhqchart.demo\jscommon\umychart.resource\css\" />
+    <Folder Include="public\webhqchart.demo\jscommon\umychart.resource\font\" />
+    <Folder Include="public\webhqchart.demo\jscommon\umychart.resource\js\" />
+    <Folder Include="public\webhqchart.demo\jscommon\umychart.resource\js\codemirror\" />
+    <Folder Include="src\" />
+    <Folder Include="src\assets\" />
+    <Folder Include="src\components\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="babel.config.js" />
+    <Content Include="src\main.js" />
+  </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+      npm run build
+    </PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

@@ -1,0 +1,41 @@
+<html>
+<head>
+    <script type="text/javascript">
+        var loadingShow = true;
+    </script>
+</head>
+<body style="overflow: hidden;">
+    <input hidden id="id" value="">
+    <iframe style="width: 100%;height: 100vh" srcdoc="" id="iframe">
+    </iframe>
+
+    <script>
+     $(function () {
+     	 // 当前界面没有值时才去父窗口获取ID 否则刷新当前ID(避免当前窗口未关闭 再打开新窗口返回刷新当前窗口获取到其他ID)
+     	 var id =  $("#id").val();
+     	 if(typeof (id ) == "undefined" || id == null || id === "" || id == 'null'){
+     	 	// 从父窗口中获取选中ID
+         	id =  window.opener.document.getElementById("tbPatientId").value;
+         	// 将选中的父窗口的ID值保存在当前窗口
+         	$("#id").val(id);
+     	 }
+         // 实际跳转的html界面的url
+         var url = "~~~~?id="+id;
+         openUrl('id','',url,'');
+     })
+
+    /**
+     * 打开页面
+     */
+    function openUrl(id, name, url, refresh) {
+        $.ajax({
+            url: url,
+            method: "GET",
+            success : function(data) { // ajax返回的数据
+                $("#iframe").attr("srcdoc",data);
+            }
+        });
+    }
+    </script>
+</body>
+</html>
