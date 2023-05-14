@@ -13,18 +13,11 @@
     let url = window.location.href;   //获取地址栏的url
     let id="symbol";
     let id1="symbol1";
-    if(!sessionStorage.getItem("id")){    //若本地存储的id值不存在
       if (url.indexOf("?") != -1) {
         let str = url.substr(url.indexOf("?")+1);
         id1 = str.split("=")[1];
         id = id1.substr(0, 9);
       }
-      sessionStorage.setItem("id",id);
-    }
-    else{
-      id=sessionStorage.getItem("id");
-    }
-    //document.title = "test test test";
     document.title = id;
 
 </script>
