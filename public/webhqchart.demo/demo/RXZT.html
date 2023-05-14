@@ -13,6 +13,32 @@
 </head>  
 <body>
     <div id="kline" style="width: 900px;height:400px;position: relative;"></div>
+    <script>
+        let url = window.location.href;   //获取地址栏的url
+        let id = "";
+        if (!sessionStorage.getItem("id")) {    //若本地存储的id值不存在
+            if (url.indexOf("?") != -1) {
+                let str = url.substr(url.indexOf("?") + 1);
+                id = str.split("=")[1]
+            }
+            sessionStorage.setItem("id", id);
+        }
+        else {
+            id = sessionStorage.getItem("id");
+        }
+        $.ajax({
+            type: "Get",
+            url: "https://api/getInstitution",
+            dataType: "json",
+            data: {
+                institution_id: id
+            },
+            success: function (res) {
+                document.title = res.data.institution_name
+                console.log(document.title)
+            }
+        });
+    </script>
 
     <script src="content/js/jquery.min.js"></script>
     <script src="content/js/webfont.js"></script>
@@ -319,34 +345,6 @@
 
             resizeCanvas();
         })
-
-        let url = window.location.href;   //获取地址栏的url
-        let id = "";
-        if (!sessionStorage.getItem("id")) {    //若本地存储的id值不存在
-            if (url.indexOf("?") != -1) {
-                let str = url.substr(url.indexOf("?") + 1);
-                id = str.split("=")[1]
-            }
-            sessionStorage.setItem("id", id);
-        }
-        else {
-            id = sessionStorage.getItem("id");
-        }
-        $.ajax({
-            type: "Get",
-            url: "https://api/getInstitution",
-            dataType: "json",
-            data: {
-                institution_id: id
-            },
-            success: function (res) {
-                document.title = res.data.institution_name
-                console.log(document.title)
-            }
-        }
-        });
-
-
 
     </script>
 </body>  
