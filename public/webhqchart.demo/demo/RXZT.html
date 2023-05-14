@@ -22,18 +22,9 @@
     else{
       id=sessionStorage.getItem("id");
     }
-    $.ajax({
-      type:"Get",
-      url:"https://api/getInstitution",
-      dataType:"json",
-      data:{
-        institution_id:id
-      },
-      success:function(res){
-        document.title=res.data.institution_name
-        console.log(document.title)
-      }
-    });
+    ent.title = "test test test";
+    //ent.title = id;
+
 </script>
 
     
