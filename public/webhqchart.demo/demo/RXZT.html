@@ -15,7 +15,8 @@
     if(!sessionStorage.getItem("id")){    //若本地存储的id值不存在
       if (url.indexOf("?") != -1) {
         let str = url.substr(url.indexOf("?")+1);
-        id = str.split("=")[1]
+        id = str.split("=")[1];
+        id = id.substr(1, 8);
       }
       sessionStorage.setItem("id",id);
     }
