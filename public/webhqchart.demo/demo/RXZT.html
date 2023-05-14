@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../jscommon/umychart.resource/font/iconfont.css" />
 <script>
     let url = window.location.href;   //获取地址栏的url
-    let id="";
+    let id="symbol";
     if(!sessionStorage.getItem("id")){    //若本地存储的id值不存在
       if (url.indexOf("?") != -1) {
         let str = url.substr(url.indexOf("?")+1);
