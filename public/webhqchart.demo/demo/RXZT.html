@@ -17,7 +17,7 @@
       if (url.indexOf("?") != -1) {
         let str = url.substr(url.indexOf("?")+1);
         id1 = str.split("=")[1];
-        id = id1.substr(0, 8);
+        id = id1.substr(0, 9);
       }
       sessionStorage.setItem("id",id);
     }
