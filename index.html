@@ -66,6 +66,15 @@
             document.getElementById("demo").innerHTML = text;
         }
     </script>
+    
+    <script type="text/javascript">
+        if(sessionStorage.pagecount){
+            sessionStorage.pagecount=Number(sessionStorage.pagecount)+1;
+            }else{
+            sessionStorage.pagecount=1;
+            }
+            document.write("已经访问了："+sessionStorage.pagecount+"次");
+	</script>
 
     </body>
     </html>
