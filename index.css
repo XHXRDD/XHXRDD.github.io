@@ -3,7 +3,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      grid-template-columns: 50vw 50vw;
+      grid-template-columns: 30vw 70vw;
       grid-template-rows: 50vh 50vh;
       grid-template-areas:
       "left right-up"
@@ -11,7 +11,7 @@
     }
     .left {
       grid-area: left;
-      background-color: blue;
+      background-color: white;
     }
     .right-up {
       grid-area: right-up;
