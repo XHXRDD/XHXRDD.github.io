@@ -3,7 +3,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      grid-template-columns: 25vw 75vw;
+      grid-template-columns: 20vw 80vw;
       grid-template-rows: 50vh 50vh;
       grid-template-areas:
       "left right-up"
