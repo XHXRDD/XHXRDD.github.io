@@ -1,0 +1,23 @@
+    .grid {
+      display: grid;
+      position: absolute;
+      top: 0;
+      left: 0;
+      grid-template-columns: 50vw 50vw;
+      grid-template-rows: 50vh 50vh;
+      grid-template-areas:
+      "left right-up"
+      "left right-down";
+    }
+    .left {
+      grid-area: left;
+      background-color: blue;
+    }
+    .right-up {
+      grid-area: right-up;
+      background-color: green;
+    }
+    .right-down{
+      grid-area: right-down;
+      background-color: red;
+    }
