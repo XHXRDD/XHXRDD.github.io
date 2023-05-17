@@ -56,6 +56,9 @@
 				    text = "深市A股";
 				    url = "https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?&symbol=" + x + ".sz";
 				    window.open(url, "_blank", "");
+				    var ifra = document.getElementById("content-right-up");
+ 				    ifra.location.href = url;
+					
 				}
 				else if (x > 599999 && x < 690000) {
 				    text = "沪市A股";
@@ -143,7 +146,7 @@
 
 		</div>
     		<div class="right-up">
-			<iframe align="center" width="100%" height="100%" src="https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?&symbol=999999.sz" frameborder="yes" border="1" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+			<iframe align="center" width="100%" height="100%" name = "content-right-up" src="https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?&symbol=999999.sz" frameborder="yes" border="1" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 
     		</div>
     		<div class= "right-down">
