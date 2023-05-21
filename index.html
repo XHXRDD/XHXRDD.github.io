@@ -16,145 +16,182 @@
       <link rel="stylesheet" type="text/css" href="index.css"/>
 </head>
 <body>
+	<nav>
+		<div class="top">
+			<ul style="text-align: center; vertical-align: top">
+				<li>
+					<a style="vertical-align: top" href="#">经典缠论资源</a>
+					<ul class="tow">
+						<li><a href="#">二级菜单</a></li>
+						<li><a href="#">二级菜单</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="meclyksp.html">摩尔缠论原课程视频</a>
+					<ul>
+						<li><a href="#">二级菜单</a></li>
+						<li><a href="#">二级菜单</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="#">学习笔记</a>
+					<ul class="tow">
+						<li><a href="#">二级菜单</a></li>
+						<li><a href="#">二级菜单</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="#">不错的站点</a>
+					<ul class="tow">
+						<li><a href="#">二级菜单</a></li>
+						<li><a href="#">二级菜单</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="#">辅助工具</a>
+					<ul class="tow">
+						<li><a href="#">二级菜单</a></li>
+						<li><a href="#">二级菜单</a></li>
+					</ul>
+				</li>
+
+				<li>
+					<a href="#">联系方式</a>
+					<ul class="tow">
+						<li><a href="#">二级菜单</a></li>
+						<li><a href="#">二级菜单</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</nav>
 	<div class="grid">
-    		<div class="left">
-		    <h1>摩尔缠论学习交流 </h1>
+		<div class="left">
+			<h1>摩尔缠论学习交流 </h1>
 
-		    <p>请输入六位股票代码：</p>
+			<p>请输入六位股票代码：</p>
 
-		    <input id="numb" maxLength=6 minLength=6>
+			<input id="numb" maxLength=6 minLength=6>
 
-		    <button type="button" onclick="myFunction()">提交</button>
+			<button type="button" onclick="myFunction()">提交</button>
 
-		    <p id="demo"></p>
+			<p id="demo"></p>
 
-		    <script>
-			/*
-			创业板：创业板的代码是300打头的股票代码
-			沪市A股：沪市A股的代码是以600、601、603或605打头
-			沪市B股：沪市B股的代码是以900打头
-			深市A股：深市A股的代码是以000打头
-			深市B股：深市B股的代码是以200打头
-			科创板：科创板的代码是688打头
-			中小板：中小板的代码是002打头
-			新股申购：沪市新股申购的代码是以730打头
-			深市新股申购的代码与深市股票买卖代码一样
-			配股代码：沪市以700打头，深市以080打头 权证，沪市是580打头 深市是031打头
-			*/
-			function myFunction() {
-			    // 获取 id = "numb" 的输入字段的值
-			    let x = document.getElementById("numb").value;
-			    let text;
-			    if (x.length < 6) {
-				text = "请输入6位代码";
-			    }
-			    else if (isNaN(x) || x < 1 || x > 699999) {
-				text = "无效A股代码";
-			    }
-			    else {
-				if (x > 0 && x < 400000) {
-				    text = "深市A股";
-				    url = "https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?&symbol=" + x + ".sz";
-				    window.open(url, "_blank", "");
-				    var ifra = document.getElementById("content-right-up");
- 				    ifra.src = url;
-				    ifra.reload();
-					
+			<script>
+				/*
+				创业板：创业板的代码是300打头的股票代码
+				沪市A股：沪市A股的代码是以600、601、603或605打头
+				沪市B股：沪市B股的代码是以900打头
+				深市A股：深市A股的代码是以000打头
+				深市B股：深市B股的代码是以200打头
+				科创板：科创板的代码是688打头
+				中小板：中小板的代码是002打头
+				新股申购：沪市新股申购的代码是以730打头
+				深市新股申购的代码与深市股票买卖代码一样
+				配股代码：沪市以700打头，深市以080打头 权证，沪市是580打头 深市是031打头
+				*/
+				function myFunction() {
+					// 获取 id = "numb" 的输入字段的值
+					let x = document.getElementById("numb").value;
+					let text;
+					if (x.length < 6) {
+						text = "请输入6位代码";
+					}
+					else if (isNaN(x) || x < 1 || x > 699999) {
+						text = "无效A股代码";
+					}
+					else {
+						if (x > 0 && x < 400000) {
+							text = "深市A股";
+							url = "https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?&symbol=" + x + ".sz";
+							window.open(url, "_blank", "");
+							var ifra = document.getElementById("content-right-up");
+							ifra.src = url;
+							ifra.reload();
+
+						}
+						else if (x > 599999 && x < 690000) {
+							text = "沪市A股";
+							url = "https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?&symbol=" + x + ".sh";
+							window.open(url, "_blank", "");
+
+						}
+						else
+							text = "无效A股代码";
+					}
+					document.getElementById("demo").innerHTML = text;
 				}
-				else if (x > 599999 && x < 690000) {
-				    text = "沪市A股";
-				    url = "https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?&symbol=" + x + ".sh";
-				    window.open(url, "_blank", "");
-
-				}
-				else
-				    text = "无效A股代码";
-			    }
-			    document.getElementById("demo").innerHTML = text;
-			}
-		    </script>
+			</script>
 
 
 			<script type="text/javascript">
-			var caution=false
-			function setCookie(name,value,expires,path,domain,secure) 
-			{
-			 var curCookie=name+"="+escape(value) +
-			 ((expires)?";expires="+expires.toGMTString() : "") +
-			 ((path)?"; path=" + path : "") +
-			 ((domain)? "; domain=" + domain : "") +
-			 ((secure)?";secure" : "")
-			 if(!caution||(name + "=" + escape(value)).length <= 4000)
-			 {
-			 document.cookie = curCookie
-			 }
-			 else if(confirm("Cookie exceeds 4KB and will be cut!"))
-			 {
-			 document.cookie = curCookie
-			 }
-			}
-			function getCookie(name) 
-			{
-			 var prefix = name + "="
-			 var cookieStartIndex = document.cookie.indexOf(prefix)
-			 if (cookieStartIndex == -1)
-			 {
-			 return null
-			 } 
-			 var cookieEndIndex=document.cookie.indexOf(";",cookieStartIndex+prefix.length)
-			 if(cookieEndIndex == -1)
-			 {
-			 cookieEndIndex = document.cookie.length
-			 }
-			 return unescape(document.cookie.substring(cookieStartIndex+prefix.length,cookieEndIndex))
-			}
-			function deleteCookie(name, path, domain) 
-			{
-			 if(getCookie(name)) 
-			 {
-			 document.cookie = name + "=" + 
-			 ((path) ? "; path=" + path : "") +
-			 ((domain) ? "; domain=" + domain : "") +
-			 "; expires=Thu, 01-Jan-70 00:00:01 GMT"
-			 }
-			}
-			function fixDate(date) 
-			{
-			 var base=new Date(0)
-			 var skew=base.getTime()
-			 if(skew>0)
-			 {
-			 date.setTime(date.getTime()-skew)
-			 } 
-			}
-			var now=new Date()
-			fixDate(now)
-			now.setTime(now.getTime()+365 * 24 * 60 * 60 * 1000)
-			var visits = getCookie("counter")
-			if(!visits)
-			{
-			 visits=1;
-			} 
-			else
-			{
-			 visits=parseInt(visits)+1;
-			} 
-			setCookie("counter", visits, now)
-			document.write("您是到访的第" + visits + "位用户！")
+				var caution = false
+				function setCookie(name, value, expires, path, domain, secure) {
+					var curCookie = name + "=" + escape(value) +
+						((expires) ? ";expires=" + expires.toGMTString() : "") +
+						((path) ? "; path=" + path : "") +
+						((domain) ? "; domain=" + domain : "") +
+						((secure) ? ";secure" : "")
+					if (!caution || (name + "=" + escape(value)).length <= 4000) {
+						document.cookie = curCookie
+					}
+					else if (confirm("Cookie exceeds 4KB and will be cut!")) {
+						document.cookie = curCookie
+					}
+				}
+				function getCookie(name) {
+					var prefix = name + "="
+					var cookieStartIndex = document.cookie.indexOf(prefix)
+					if (cookieStartIndex == -1) {
+						return null
+					}
+					var cookieEndIndex = document.cookie.indexOf(";", cookieStartIndex + prefix.length)
+					if (cookieEndIndex == -1) {
+						cookieEndIndex = document.cookie.length
+					}
+					return unescape(document.cookie.substring(cookieStartIndex + prefix.length, cookieEndIndex))
+				}
+				function deleteCookie(name, path, domain) {
+					if (getCookie(name)) {
+						document.cookie = name + "=" +
+							((path) ? "; path=" + path : "") +
+							((domain) ? "; domain=" + domain : "") +
+							"; expires=Thu, 01-Jan-70 00:00:01 GMT"
+					}
+				}
+				function fixDate(date) {
+					var base = new Date(0)
+					var skew = base.getTime()
+					if (skew > 0) {
+						date.setTime(date.getTime() - skew)
+					}
+				}
+				var now = new Date()
+				fixDate(now)
+				now.setTime(now.getTime() + 365 * 24 * 60 * 60 * 1000)
+				var visits = getCookie("counter")
+				if (!visits) {
+					visits = 1;
+				}
+				else {
+					visits = parseInt(visits) + 1;
+				}
+				setCookie("counter", visits, now)
+				document.write("您是到访的第" + visits + "位用户！")
 			</script>
 
 
 
 		</div>
-    		<div class="right-up">
-			<iframe align="center" width="100%" height="100%" id = "content-right-up" src="https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?&symbol=999999.sz" frameborder="yes" border="1" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+		<div class="right-up">
+			<iframe align="center" width="100%" height="100%" id="content-right-up" src="https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?&symbol=999999.sz" frameborder="yes" border="1" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 
-    		</div>
-    		<div class= "right-down">
+		</div>
+		<div class="right-down">
 			<iframe align="center" width="100%" height="100%" src="https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?&symbol=399001.sz" frameborder="yes" border="1" marginwidth="0" marginheight="0" scrolling="no"></iframe>
-    		</div>
-  	</div>
-	
-	
-    </body>
+		</div>
+	</div>
+
+
+</body>
     </html>

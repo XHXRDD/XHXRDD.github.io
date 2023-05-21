@@ -1,23 +1,111 @@
-    .grid {
-      display: grid;
-      position: absolute;
-      top: 0;
-      left: 0;
-      grid-template-columns: 20vw 80vw;
-      grid-template-rows: 50vh 50vh;
-      grid-template-areas:
-      "left right-up"
-      "left right-down";
+<style type="text/css" >
+<!--
+* {
+    margin: 0;
+    padding: 0;
+    margin-top: 0;
+    margin-left: 0; 
+}
+    .top {
+        height: 4%;
+        width: 100%;
+        margin-top: 0px;
+        margin-left: 0px;
+        position: relative;
+        top: 0;
+        background: aliceblue;
+
+        text-align: inherit  ;
+       
     }
-    .left {
-      grid-area: left;
-      background-color: white;
+
+    .top ul {
+        list-style-type: none;
+        width: 100%;
+        height: auto;
+        vertical-align:  text-top;
+        white-space: nowrap;
+        overflow: hidden;
+        align-content: center;
+        padding: 0;
+        display:  flow-root;  //table-cell; 
+        top: 0;
+
     }
-    .right-up {
-      grid-area: right-up;
-      background-color: white;
+
+    .top li {
+        float: left;
+        width: auto;
+        margin-top: 0%;
+        margin-right: 3%;
+        overflow: hidden;
+        vertical-align: top;
+        top: 0;
+        position: relative;
     }
-    .right-down{
-      grid-area: right-down;
-      background-color: white;
+
+    .top li a {
+        display: block;
+        color: black;
+        text-align:  match-parent;
+        overflow: hidden;
+        text-decoration: none;
+        vertical-align: top;
+        top: 0;
+   
     }
+
+    .top ul li ul {
+        display: none;
+        width: auto;
+        height: 50;
+        border: 1px solid #F1EBEB;
+        background-color: rgba(94,121,187,1.00);
+        top: 0;
+    }
+
+    .top ul li ul li {
+        /* 二级菜单li内容的显示 */
+        border: 1;
+        float: none;
+        width: auto;
+        text-align: center;
+    }
+
+    .top ul li:hover ul {
+        /* 鼠标选中二级菜单内容时 */
+        display: block; /* 鼠标滑过一级菜单后的显示二级菜单 */
+        background: rgb(45,67,120);
+    }
+
+.grid {
+    display: grid;
+    position: absolute;
+    top: 4%;
+    left: 0;
+    grid-template-columns: 20vw 80vw;
+    grid-template-rows: 44vh 50vh;
+    grid-template-areas:
+        "left right-up"
+        "left right-down";
+}
+
+.left {
+    grid-area: left;
+    background-color: white;
+}
+
+.right-up {
+    grid-area: right-up;
+    background-color: white;
+}
+
+.right-down {
+    grid-area: right-down;
+    background-color: white;
+}
+
+    -->
+
+</style >
+
