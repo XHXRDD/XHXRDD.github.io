@@ -1,8 +1,8 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">  
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6080553857226714"
-     crossorigin="anonymous"></script>
+    <script async=async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6080553857226714"
+            crossorigin="anonymous"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="Access-Control-Allow-Origin" content="*" />
     <meta http-equiv="Access-Control-Allow-Methods" content="OPTIONS,POST,GET,PUT,DELETE,HEAD,TRACE" />
@@ -11,20 +11,20 @@
     <title>日K线图</title>
     <link rel="stylesheet" href="../jscommon/umychart.resource/css/tools.css" />
     <link rel="stylesheet" href="../jscommon/umychart.resource/font/iconfont.css" />
-<script>
-    let url = window.location.href;   //获取地址栏的url
-    let id="symbol";
-    let id1="symbol1";
-      if (url.indexOf("?") != -1) {
-        let str = url.substr(url.indexOf("?")+1);
-        id1 = str.split("=")[1];
-        id = id1.substr(0, 9);
-      }
-    document.title = id;
+    <script>
+        let url = window.location.href;   //获取地址栏的url
+        let id = "symbol";
+        let id1 = "symbol1";
+        if (url.indexOf("?") != -1) {
+            let str = url.substr(url.indexOf("?") + 1);
+            id1 = str.split("=")[1];
+            id = id1.substr(0, 9);
+        }
+        document.title = id;
 
-</script>
+    </script>
 
-    
+
 </head>  
 <body>
     <div id="kline" style="width: 900px;height:400px;position: relative;"></div>
