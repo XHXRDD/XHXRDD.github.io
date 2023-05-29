@@ -89,6 +89,9 @@
 							text = "沪市A股";
 							url = "https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?&symbol=" + x + ".sh";
 							window.open(url, "_blank", "");
+                            var ifra = document.getElementById("content-right-up");
+                            ifra.src = url;
+                            ifra.reload();
 
 						}
 						else
