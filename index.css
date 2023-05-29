@@ -84,7 +84,7 @@
     top: 4%;
     left: 0;
     grid-template-columns: 20vw 80vw;
-    grid-template-rows: 44vh 50vh;
+    grid-template-rows: 95vh 0vh  /*44vh 50vh*/;
     grid-template-areas:
         "left right-up"
         "left right-down";
