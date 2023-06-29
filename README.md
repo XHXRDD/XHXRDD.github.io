@@ -1,3 +1,3 @@
-# VuejsMoreSegment
+# VuejsMooreSegment
 
 
