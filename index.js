@@ -6,7 +6,7 @@ const autoCompleteJS = new autoComplete({
         // Loading placeholder text
         document.getElementById("autoComplete").setAttribute("placeholder", "Loading...");
         // Fetch External Data Source
-        const source = await fetch("http://localhost:8081/db/stocklist.json");
+        const source = await fetch("https://zettathings.top/stocklist.json");
         const data = await source.json();
         // Post Loading placeholder text
         document.getElementById("autoComplete").setAttribute("placeholder", autoCompleteJS.placeHolder);
