@@ -83,7 +83,7 @@
     position: relative;
     top: 4%;
     left: 0;
-    grid-template-columns: 20vw 78vw;
+    grid-template-columns: 24vw 74vw;
     grid-template-rows: 95vh 0vh  /*44vh 50vh*/;
     grid-template-areas:
         "left right-up"
