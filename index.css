@@ -77,21 +77,58 @@
         display: block; /* 鼠标滑过一级菜单后的显示二级菜单 */
         background: rgb(45,67,120);
     }
-
-.grid {
+.gridline {
     display: grid;
     position: relative;
-    top: 4%;
+    top: 0;
     left: 0;
-    grid-template-columns: 24vw 74vw;
-    grid-template-rows: 95vh 0vh  /*44vh 50vh*/;
+    vertical-align: top;
+    grid-template-columns: 30vw 40vw 30vw;
+    //grid-template-rows: 100vh 0vh /*44vh 50vh*/;
     grid-template-areas:
-        "left right-up"
-        "left right-down";
+        "left middle right";
 }
 
 .left {
     grid-area: left;
+    background-color: white;
+    vertical-align: top;
+    text-align: center;
+}
+
+.middle {
+    grid-area: middle;
+    background-color: white;
+    vertical-align: top;
+    text-align: center;
+}
+.right {
+    grid-area: right;
+    background-color: white;
+    vertical-align: bottom;
+    text-align: center;
+}
+
+
+.grid {
+    display: grid;
+    position: relative;
+    top: 0;
+    left: 0;
+    grid-template-columns: 98vw 2vw;
+    grid-template-rows: 91vh 4vh  /*44vh 50vh*/;
+    grid-template-areas:
+        "left-up right-up"
+        "left-down right-down";
+}
+
+.left-up {
+    grid-area: left-up;
+    background-color: white;
+}
+
+.left-down {
+    grid-area: left-down;
     background-color: white;
 }
 
@@ -104,6 +141,7 @@
     grid-area: right-down;
     background-color: white;
 }
+
 
     -->
 

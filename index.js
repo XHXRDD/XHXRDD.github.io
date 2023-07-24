@@ -7,7 +7,8 @@ const autoCompleteJS = new autoComplete({
         document.getElementById("autoComplete").setAttribute("placeholder", "Loading...");
         // Fetch External Data Source
         const source = await fetch("https://zettathings.top/stocklist.json");
-        const data = await source.json();
+        //const source = await fetch("http://localhost:8081/db/stocklist.json");
+          const data = await source.json();
         // Post Loading placeholder text
         document.getElementById("autoComplete").setAttribute("placeholder", autoCompleteJS.placeHolder);
         // Returns Fetched data
@@ -29,19 +30,20 @@ const autoCompleteJS = new autoComplete({
       return filteredResults;
     },
   },
-  placeHolder: "Search for stocks",
+    placeHolder: "请输入股票代码/名称/简拼：",
   resultsList: {
     element: (list, data) => {
-      const info = document.createElement("p");
+       /* const info = document.createElement("p");
       if (data.results.length) {
         info.innerHTML = `Displaying <strong>${data.results.length}</strong> out of <strong>${data.matches.length}</strong> results`;
       } else {
         info.innerHTML = `Found <strong>${data.matches.length}</strong> matching results for <strong>"${data.query}"</strong>`;
       }
-      list.prepend(info);
+     list.prepend(info);
+      */
     },
     noResults: true,
-    maxResults: 15,
+     maxResults: 15,
     tabSelect: true,
   },
   resultItem: {
