@@ -93,7 +93,7 @@
     grid-area: left;
     background-color: white;
     vertical-align: top;
-    text-align: center;
+    text-align: left;
     color:red;
 }
 
@@ -107,7 +107,7 @@
     grid-area: right;
     background-color: white;
     vertical-align: bottom;
-    text-align: center;
+    text-align: left;
 }
 
 
