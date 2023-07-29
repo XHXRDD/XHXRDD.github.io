@@ -27,7 +27,7 @@
 
 </head>  
 <body>
-    <div id="kline" style="width: 900px;height:400px;position: relative;"></div>
+    <div id="kline" style="width: 900px;height:400px;position: absolute;"></div>
     <script src="content/js/jquery.min.js"></script>
     <script src="content/js/webfont.js"></script>
 
@@ -77,10 +77,22 @@
                     var hqchart = data.HQChart;
                     var kData = hqchart.ChartPaint[0].Data;
 
-                    var line =
+                    var line1 =
                     {
                         name: 'MULTI_LINE', type: 1,
-                        Draw: { DrawType: 'MULTI_LINE', DrawData: [] } //绘制线段数组
+                        Draw: { DrawType: 'MULTI_LINE', DrawData: [], LineWidth: 1, } //绘制线段数组
+                    };
+
+                    var line2 =
+                    {
+                        name: 'MULTI_LINE', type: 1,
+                        Draw: { DrawType: 'MULTI_LINE', DrawData: [], LineWidth: 2, } //绘制线段数组
+                    };
+
+                    var line3 =
+                    {
+                        name: 'MULTI_LINE', type: 1,
+                        Draw: { DrawType: 'MULTI_LINE', DrawData: [], LineWidth: 3, } //绘制线段数组
                     };
 
                     var ZSpoint, XDpoint;
@@ -100,6 +112,7 @@
                     var lastEnding = 0;
                     let curpoint;
                     curpoint = JSON.parse(JSON.stringify(ZSpoint));
+                    //line2.Draw.LineWidth = 2;
 
                     //画ZSFLZS
                     for (i = 0; i < ZSpoint.Point.length; i++) {
@@ -108,7 +121,7 @@
                             curpoint.Point = tmppointcontent;
                             curpoint.Color = "rgb(244, 0, 0)";
                             lastEnding = i + 1;
-                            line.Draw.DrawData.push(curpoint);
+                            line2.Draw.DrawData.push(curpoint);
                             let curppoint;
                             curpoint = JSON.parse(JSON.stringify(ZSpoint));
                         }
@@ -117,14 +130,14 @@
                             curpoint.Point = tmppointcontent;
                             curpoint.Color = "rgb(0, 244, 0)";
                             lastEnding = i + 1;
-                            line.Draw.DrawData.push(curpoint);
+                            line2.Draw.DrawData.push(curpoint);
                             let curppoint;
                             curpoint = JSON.parse(JSON.stringify(ZSpoint));
                         }
                     }
 
 
-                    // 取回F30XD数据：
+                    //画F30XD数据：
                     $.ajax({
                         type: "get",
                         url: "https://zettathings.top/public/F30XD/" + symbol + ".json",
@@ -134,15 +147,75 @@
                             XDpoint = data;
                         }
                     });
+                    XDpoint.Color = "rgb(255, 255, 0)";
+                    line1.Draw.DrawData.push(XDpoint);
 
-                    line.Draw.DrawData.push(XDpoint);
+
+                    var ZWMZSpoint;
+                    var symbol = getURLParams('symbol');
+                    if (symbol == null) symbol = '002981.sz';
+                    //取回ZWMZS数据：
+                    $.ajax({
+                        type: "get",
+                        url: "https://zettathings.top/public/ZWMZS/" + symbol + ".json",
+                        //url: "http://localhost:8081/ZWMZS/" + symbol + ".json",
+
+                        dataType: "json",
+                        async: false,
+                        success: function (data) {
+                            ZWMZSpoint = data;
+                        }
+                    });
+
+                    var lastEndingzwm = 0;
+                    let curpointzwm;
+                    curpointzwm = JSON.parse(JSON.stringify(ZWMZSpoint));
+
+                    //line2.Draw.LineWidth = 2;
+                    //画ZWMZS
+                    for (i = 0; i < ZWMZSpoint.Point.length; i++) {
+                        if (ZWMZSpoint.Point[i].Value == 0) {
+                            var tmppointcontentzwm = curpointzwm.Point.slice(lastEndingzwm, i);
+                            curpointzwm.Point = tmppointcontentzwm;
+                            curpointzwm.Color = "rgb(244, 55, 244)";
+                            lastEndingzwm = i + 1;
+                            line2.Draw.DrawData.push(curpointzwm);
+                            let curppointzwm;
+                            curpointzwm = JSON.parse(JSON.stringify(ZWMZSpoint));
+                        }
+                        else if (ZWMZSpoint.Point[i].Value == -1) {
+                            var tmppointcontentzwm = curpointzwm.Point.slice(lastEndingzwm, i);
+                            curpointzwm.Point = tmppointcontentzwm;
+                            curpointzwm.Color = "rgb(244, 55, 244)";
+                            lastEndingzwm = i + 1;
+                            line2.Draw.DrawData.push(curpointzwm);
+                            let curppointzwm;
+                            curpointzwm = JSON.parse(JSON.stringify(ZWMZSpoint));
+                        }
+                    }
+
+                    //画RXXD数据：
+                    $.ajax({
+                        type: "get",
+                        url: "https://zettathings.top/public/RXXD/" + symbol + ".json",
+                        //url: "http://localhost:8081/RXXD/" + symbol + ".json",
+                        dataType: "json",
+                        async: false,
+                        success: function (data) {
+                            XDpoint = data;
+                        }
+                    });
+
+                    XDpoint.Color = "rgb(255, 0, 0)";
+                    //line3.Draw.LineWidth = 3;
+                    line3.Draw.DrawData.push(XDpoint);
 
 
                     var apiData =
                     {
                         code: 0,
                         stock: { name: hqchart.Name, symbol: hqchart.Symbol },
-                        outdata: { date: kData.GetDate(), outvar: [line] }
+                        outdata: { date: kData.GetDate(), outvar: [line1,line2,line3] }
                     };
 
                     data.PreventDefault = true;
@@ -163,7 +236,7 @@
             }
         }
 
-
+  
         $(function () {
             var debug = getURLParams('debug');
             if (debug == 1) {
@@ -181,10 +254,12 @@
             // 创建股票K线图
             var chart = JSChart.Init(document.getElementById('kline'));
 
-            var colorType = getURLParams('colorType');
-            if (colorType == null) colorType = 'black';
+            //var colorType = getURLParams('colorType');
+            //if (colorType == null) colorType = 'white';
 
-
+            //黑色风格设置, 默认是白色风格
+            var blackStyle = HQChartStyle.GetStyleConfig(STYLE_TYPE_ID.BLACK_ID);
+            JSChart.SetStyle(blackStyle);
 
 
             var height = $(window).height();
@@ -192,6 +267,7 @@
             var divKline = document.getElementById('kline');
             divKline.style.width = width + 'px';
             divKline.style.height = height + 'px';
+            divKline.style.backgroundColor = blackStyle.BGColor;
             chart.OnSize();
 
             var option =
@@ -207,7 +283,6 @@
                                 Name: 'Moore线段',
                                 Script: null,
                                 Args: null
-                                //Url:'http://127.0.0.1:18080/api/jsindex'
                             },
                             IsShareY: true,
                             Modify: true, Change: true, Overlay: true
@@ -244,14 +319,14 @@
                     Period: 0,                   //周期 0 日线 1 周线 2 月线 3 年线
                     MaxReqeustDataCount: 1000,   //数据个数
                     MaxRequestMinuteDayCount: 6,
-                    PageSize: 90,               //一屏显示多少数据
+                    PageSize: 600,               //一屏显示多少数据
                     //IndexTreeApiUrl:"https://opensourcecache.zealink.com/cache/hqh5/index/commonindextree.json",        //指标树下载地址
                     //Info:["互动易","大宗交易",'龙虎榜',"调研","业绩预告","公告"],       //信息地雷
                     //Info:["公告","互动易","调研"],           //信息地雷
                     InfoPosition: 1,                         //显示位置
                     KLineDoubleClick: false,              //双击分钟走势图
                     IsShowTooltip: true,                 //是否显示K线提示信息
-                    //FirstShowDate:20180401,             //首屏显示的起始日期
+                    //FirstShowDate:20200101,             //首屏显示的起始日期
                     DrawType: 0,
                 },
 
@@ -297,14 +372,6 @@
                             IsShowRightText: true
                         }
                     ],
-
-                /*
-                Overlay:
-                [
-                    //{Symbol:'000001.sh', DrawType:0},
-                    //{Symbol:'002415.sz', DrawType:0}
-                ],
-                */
 
             }
 

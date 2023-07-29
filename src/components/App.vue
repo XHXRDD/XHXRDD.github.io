@@ -91,7 +91,7 @@ export default {
     //判断是黑色版本还是白色版本
     this.colorType = commTool.getURLParams("colorType")
       ? commTool.getURLParams("colorType")
-      : "white";
+      : "black";
     if (this.colorType == "black") {
       this.blackStyle = HQChart.Chart.HQChartStyle.GetStyleConfig(
         HQChart.Chart.STYLE_TYPE_ID.BLACK_ID             

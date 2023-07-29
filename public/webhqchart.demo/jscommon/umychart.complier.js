@@ -19316,15 +19316,6 @@ function ScriptIndex(name,script,args,option)
 
         if (IFrameSplitOperator.IsNumber(this.YSplitType)) hqChart.Frame.SubFrame[windowIndex].Frame.YSplitOperator.SplitType=this.YSplitType;
 
-        /*
-        if (this.Name=='MA')    //测试多线段
-        {
-            var point1={Point:[{Index:300, Value:15.5}, {Index:301, Value:14.2} , {Index:304, Value:14.05}], Color:'rgb(244,55,50)'};
-            var point2={Point:[{Index:307, Value:14.5}, {Index:308, Value:14.2} , {Index:309, Value:14.15}], Color:'rgb(0,55,50)'};
-            var testData={ Name:'MULTI_LINE', Type:1,Draw:{ DrawType:'MULTI_LINE', DrawData:[point1,point2] } };
-            this.OutVar.push(testData);
-        }
-        */
         
         for(let i in this.OutVar)
         {

@@ -7,8 +7,7 @@ const autoCompleteJS = new autoComplete({
         document.getElementById("autoComplete").setAttribute("placeholder", "Loading...");
         // Fetch External Data Source
         const source = await fetch("https://zettathings.top/stocklist.json");
-        //const source = await fetch("http://localhost:8081/db/stocklist.json");
-          const data = await source.json();
+        const data = await source.json();
         // Post Loading placeholder text
         document.getElementById("autoComplete").setAttribute("placeholder", autoCompleteJS.placeHolder);
         // Returns Fetched data
@@ -97,13 +96,14 @@ const autoCompleteJS = new autoComplete({
           if (x > 0 && x < 400000) {
             text = "深市A股";
             url = "https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?&symbol=" + x + ".sz";
+           //url = "http://localhost:8081/webhqchart.demo/demo/RXZT.html?&symbol=" + x + ".sz";
             window.open(url, "_blank", "");
             var ifra = document.getElementById("content-right-up");
             ifra.src = url;
             ifra.reload();
 
           }
-          else if (x > 599999 && x < 690000) {
+          else if (x > 599999 && x < 1000000) {
             text = "沪市A股";
             url = "https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?&symbol=" + x + ".sh";
             window.open(url, "_blank", "");

@@ -568,12 +568,13 @@ td.context-menu {
 }
 /*加载层结束*/
 
-.kline-info{
-    position: absolute; 
+.kline-info {
+    position: absolute;
     /*opacity: 0.8;*/
     width: 16px;
     height: 16px;
-    background-color: #fff;
+    /*background-color: #fff;*/
+    background-color: #000;
     /*border: 2px solid #ff3232;*/
     color: #ff3232;
     text-align: center;
