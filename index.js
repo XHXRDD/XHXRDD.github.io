@@ -89,7 +89,7 @@ const autoCompleteJS = new autoComplete({
         if (x.length < 6) {
           text = "请输入6位代码";
         }
-        else if (isNaN(x) || x < 1 || x > 699999) {
+        else if (isNaN(x) || x < 1 || x > 1000000) {
           text = "无效A股代码";
         }
         else {
