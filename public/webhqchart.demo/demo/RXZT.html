@@ -68,9 +68,150 @@
             divKline.JSChart.OnSize();
         }
 
+        function GetInternalSymbol(symbol)   //HQChart内置代码转成东方财富代码
+        {
+            var aryData = symbol.split(".");
+            var symbolUpper = symbol.toUpperCase();
+            var arySymbol = aryData[0].split('_');
+            var market = parseInt(arySymbol[1]);
+            var internalSymbol = arySymbol[0];
+
+            if (internalSymbol.indexOf("-") > 0) {
+                var aryValue = internalSymbol.split('-');
+                internalSymbol = aryValue[1];
+            }
+
+            return { Market: market, Symbol: internalSymbol };
+        }
+
+        function GetInternalPeriod(periodID) {
+            var MAP_PERIOD = new Map(
+                [
+                    [0, 101],   //day
+                    [1, 102],   //week
+                    [2, 103],   //month
+
+                    [4, 1],    //1min
+                    [5, 5],    //5min
+                    [6, 15],   //15min
+                    [7, 30],   //30min
+                    [8, 60],   //60min
+                ]
+            );
+
+            return MAP_PERIOD.get(periodID);
+        }
+
+        function GetInternalRight(right) {
+            if (right == 0) return 0;
+            else if (right == 1) return 1;
+            else return 2;
+        }
+        ///////////////////////////////////////////////////////////////////////////////////
+        //K线数据对接
+        //
+        /////////////////////////////////////////////////////////////////////////////////
+        function GetKLineApiUrl(symbol, period, right, option) {
+            var internalSymbol = symbol; //GetInternalSymbol(symbol);
+            var internalPeriod = GetInternalPeriod(period);
+            var internalRight = GetInternalRight(right);
+            if (option && option.Update == true) {
+                var beginDate = option.End;
+                var url = `http://push2his.eastmoney.com/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&beg=${beginDate}&end=20500101&ut=fa5fd1943c7b386f172d6893dbfba10b&rtntype=6&secid=${internalSymbol}&klt=${internalPeriod}&fqt=${internalRight}`;
+            }
+            else {
+                var url = `http://push2his.eastmoney.com/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&beg=0&end=20500101&ut=fa5fd1943c7b386f172d6893dbfba10b&rtntype=6&secid=${internalSymbol}&klt=${internalPeriod}&fqt=${internalRight}`;
+            }
+
+            return { Url: url, Symbol: symbol, InternalSymbol: internalSymbol, Period: period, Right: right };
+        }
+
+
+        function RecvHistoryData(recvData, callback, option) {
+            var data = recvData.data;
+
+            var hqChartData = { code: 0, data: [] };
+            hqChartData.symbol = option.Obj.Symbol;
+            hqChartData.name = data.name;
+
+            var yClose = data.preKPrice;;
+            for (var i = 0; i < data.klines.length; ++i) {
+                var strItem = data.klines[i];
+                var item = strItem.split(',');
+                var today = new Date(Date.parse(item[0]));
+                var date = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+
+                var open = parseFloat(item[1]);
+                var close = parseFloat(item[2]);
+                var high = parseFloat(item[3]);
+                var low = parseFloat(item[4]);
+                var vol = parseFloat(item[5]) * 100;
+                var amount = parseFloat(item[6]);
+
+                var newItem = [date, yClose, open, high, low, close, vol, amount];
+                hqChartData.data.push(newItem);
+
+                yClose = close;
+            }
+
+
+            if (option.Data.Self.IsDestroy == false) {
+                callback(hqChartData);
+            }
+        }
+
+
+
+        function RequestHistoryData(data, callback) {
+            data.PreventDefault = true;
+            var symbol = data.Request.Data.symbol; //请求的股票代码
+            var period = data.Self.Period;    //周期
+            var right = data.Self.Right;      //复权
+
+            //console.log(`[HQData::RequestHistoryData] Symbol=${symbol}`);
+            var obj = GetKLineApiUrl(symbol, period, right, null);
+
+            $.ajax(
+                {
+                    type: "get",
+                    url: obj.Url,
+                    dataType: "json",
+                    async: false,
+                    success: function (recvData) {
+                        RecvHistoryData(recvData, callback, { Data: data, Obj: obj });
+                    }
+                });
+
+        }
+
+
         function NetworkFilter(data, callback) {
             console.log('[NetworkFilter] data', data);
 
+            data.PreventDefault = true;	//设置hqchart不请求数据
+
+            var symbol1 = getURLParams('symbol');
+            if (symbol1 == null) data.Request.Data.symbol = '0.002981';
+            else {
+                let mk = "0.";
+                let code = "000000";
+
+                mk = symbol1.substr(6, 8);
+                code = symbol1.substr(0, 6);
+
+                if (mk == ".sz")
+                    data.Request.Data.symbol = "0." + code;
+                else if (mk == ".sh")
+                    data.Request.Data.symbol = "1." + code;
+                if (code == "999999")
+                    data.Request.Data.symbol = "1.000001";
+            }
+
+            switch (data.Name) {
+                case 'KLineChartContainer::RequestHistoryData':                 //日线全量数据下载
+                    RequestHistoryData(data, callback);
+                    break;
+            }
             if (data.Name == 'APIScriptIndex::ExecuteScript') {
                 var request = data.Request;
                 if (request.Data.indexname == 'Moore线段') {
