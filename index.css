@@ -6,6 +6,11 @@
     margin-top: 0;
     margin-left: 0; 
 }
+
+img {
+    max-width: 100%;
+    height: auto;
+}
     .top {
         height: 4%;
         width: 100%;
