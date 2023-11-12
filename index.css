@@ -99,7 +99,9 @@ img {
     background-color: white;
     vertical-align: top;
     text-align: left;
-    color:red;
+    color: red;
+    max-width: 30vw;
+    height: auto;
 }
 
 .middle {
@@ -107,12 +109,16 @@ img {
     background-color: white;
     vertical-align: top;
     text-align: center;
+    max-width: 40vw;
+    height: auto;
 }
 .right {
     grid-area: right;
     background-color: white;
     vertical-align: bottom;
     text-align: left;
+    max-width: 30vw;
+    height: auto;
 }
 
 
