@@ -159,7 +159,7 @@
         }
 
 
-
+        /*
         function RequestHistoryData(data, callback) {
             data.PreventDefault = true;
             var symbol = data.Request.Data.symbol; //请求的股票代码
@@ -180,7 +180,37 @@
                     }
                 });
 
+        }*/
+        
+        function RequestHistoryData(data, callback) {
+            data.PreventDefault = true;
+            var symbol = data.Request.Data.symbol; //请求的股票代码
+            var period = data.Self.Period;    //周期
+            var right = data.Self.Right;      //复权
+
+            var obj = GetKLineApiUrl(symbol, period, right, null);
+
+            $.ajax({
+                type: "get",
+                url: obj.Url,
+                dataType: "jsonp",  // 【修改1】改为 jsonp，利用 script 标签绕过跨域限制
+                jsonp: "cb",        // 【修改2】东方财富接口指定的回调参数名是 'cb'
+                
+                // 【修改3】删除了 async: false。
+                // 原因：JSONP 本质是动态插入 <script> 标签，天生只支持异步。
+                // 如果强制写 async: false，jQuery 会报错或直接阻塞浏览器。
+                // HQChart 的 NetworkFilter 机制本身支持异步回调，所以去掉完全不影响图表渲染。
+                
+                success: function (recvData) {
+                    // JSONP 会自动把返回的数据解析为 JSON 对象，直接传给 RecvHistoryData 即可
+                    RecvHistoryData(recvData, callback, { Data: data, Obj: obj });
+                },
+                error: function (xhr, status, error) {
+                    console.error("东方财富K线接口请求失败:", status, error);
+                }
+            });
         }
+
 
 
         function NetworkFilter(data, callback) {
