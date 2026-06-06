@@ -213,26 +213,38 @@
 
             var obj = GetKLineApiUrl(symbol, period, right, null);
 
-            $.ajax({
-                type: "get",
-                url: obj.Url,
-                dataType: "text",      // 关键：不要用 "json"，避免自动转 JSONP
-                jsonp: false,          // 明确禁止 JSONP
-                async: false,
-                success: function(recvData) {
-                    // 手动解析 JSON
-                    try {
-                        var jsonData = JSON.parse(recvData);
-                        RecvHistoryData(jsonData, callback, { Data: data, Obj: obj });
-                    } catch(e) {
-                        console.error('JSON parse error:', e);
+            // 重试次数
+            var retries = 2;
+            function doRequest(attempt) {
+                $.ajax({
+                    type: "get",
+                    url: obj.Url,
+                    dataType: "text",
+                    jsonp: false,
+                    async: false,
+                    success: function(recvData) {
+                        try {
+                            var jsonData = JSON.parse(recvData);
+                            RecvHistoryData(jsonData, callback, { Data: data, Obj: obj });
+                        } catch(e) {
+                            console.error('JSON parse error:', e);
+                            if (attempt < retries) {
+                                console.log('Retrying request, attempt:', attempt + 1);
+                                doRequest(attempt + 1);
+                            }
+                        }
+                    },
+                    error: function(xhr, status, err) {
+                        console.error('东方财富K线接口请求失败:', status, err);
+                        if (attempt < retries) {
+                            console.log('Retrying request, attempt:', attempt + 1);
+                            doRequest(attempt + 1);
+                        }
                     }
-                },
-                error: function(xhr, status, err) {
-                    console.error('东方财富K线接口请求失败:', status, err);
-                }
-            });
-}
+                });
+            }
+            doRequest(1);
+        }
 
         function NetworkFilter(data, callback) {
             console.log('[NetworkFilter] data', data);
