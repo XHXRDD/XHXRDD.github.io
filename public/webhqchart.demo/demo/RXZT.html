@@ -2,9 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">  
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
-    <meta http-equiv="Access-Control-Allow-Methods" content="OPTIONS,POST,GET,PUT,DELETE,HEAD,TRACE" />
-    <meta http-equiv="Access-Control-Allow-Headers" content="x-requested-with,content-type" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>日K线图</title>
     <link rel="stylesheet" href="../jscommon/umychart.resource/css/tools.css" />
@@ -109,6 +106,7 @@
         //K线数据对接
         //
         /////////////////////////////////////////////////////////////////////////////////
+        /*
         function GetKLineApiUrl(symbol, period, right, option) {
             var internalSymbol = symbol; //GetInternalSymbol(symbol);
             var internalPeriod = GetInternalPeriod(period);
@@ -122,8 +120,27 @@
             }
 
             return { Url: url, Symbol: symbol, InternalSymbol: internalSymbol, Period: period, Right: right };
-        }
+        }*/
 
+
+        function GetKLineApiUrl(symbol, period, right, option) {
+            var internalSymbol = symbol; //GetInternalSymbol(symbol);
+            var internalPeriod = GetInternalPeriod(period);
+            var internalRight = GetInternalRight(right);
+            var baseUrl;
+            if (option && option.Update == true) {
+                var beginDate = option.End;
+                baseUrl = `https://push2his.eastmoney.com/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&beg=${beginDate}&end=20500101&ut=fa5fd1943c7b386f172d6893dbfba10b&rtntype=6&secid=${internalSymbol}&klt=${internalPeriod}&fqt=${internalRight}`;
+            }
+            else {
+                baseUrl = `https://push2his.eastmoney.com/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&beg=0&end=20500101&ut=fa5fd1943c7b386f172d6893dbfba10b&rtntype=6&secid=${internalSymbol}&klt=${internalPeriod}&fqt=${internalRight}`;
+            }
+
+            // 唯一新增：使用你自己的腾讯云代理，并编码目标URL
+            var url = `https://1314185245-b8m1k47ihc.ap-beijing.tencentscf.com/?url=${encodeURIComponent(baseUrl)}`;
+
+            return { Url: url, Symbol: symbol, InternalSymbol: internalSymbol, Period: period, Right: right };
+        }
 
         function RecvHistoryData(recvData, callback, option) {
             var data = recvData.data;
@@ -182,36 +199,36 @@
 
         }*/
         
+
+
         function RequestHistoryData(data, callback) {
             data.PreventDefault = true;
-            var symbol = data.Request.Data.symbol; //请求的股票代码
-            var period = data.Self.Period;    //周期
-            var right = data.Self.Right;      //复权
+            var symbol = data.Request.Data.symbol;
+            var period = data.Self.Period;
+            var right = data.Self.Right;
 
             var obj = GetKLineApiUrl(symbol, period, right, null);
 
             $.ajax({
                 type: "get",
                 url: obj.Url,
-                dataType: "jsonp",  // 【修改1】改为 jsonp，利用 script 标签绕过跨域限制
-                jsonp: "cb",        // 【修改2】东方财富接口指定的回调参数名是 'cb'
-                
-                // 【修改3】删除了 async: false。
-                // 原因：JSONP 本质是动态插入 <script> 标签，天生只支持异步。
-                // 如果强制写 async: false，jQuery 会报错或直接阻塞浏览器。
-                // HQChart 的 NetworkFilter 机制本身支持异步回调，所以去掉完全不影响图表渲染。
-                
-                success: function (recvData) {
-                    // JSONP 会自动把返回的数据解析为 JSON 对象，直接传给 RecvHistoryData 即可
-                    RecvHistoryData(recvData, callback, { Data: data, Obj: obj });
+                dataType: "text",      // 关键：不要用 "json"，避免自动转 JSONP
+                jsonp: false,          // 明确禁止 JSONP
+                async: false,
+                success: function(recvData) {
+                    // 手动解析 JSON
+                    try {
+                        var jsonData = JSON.parse(recvData);
+                        RecvHistoryData(jsonData, callback, { Data: data, Obj: obj });
+                    } catch(e) {
+                        console.error('JSON parse error:', e);
+                    }
                 },
-                error: function (xhr, status, error) {
-                    console.error("东方财富K线接口请求失败:", status, error);
+                error: function(xhr, status, err) {
+                    console.error('东方财富K线接口请求失败:', status, err);
                 }
             });
-        }
-
-
+}
 
         function NetworkFilter(data, callback) {
             console.log('[NetworkFilter] data', data);
