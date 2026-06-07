@@ -1,35 +1,185 @@
 ﻿<!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="zh-CN">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6080553857226714"
-            crossorigin="anonymous"></script>
-    <meta charset="utf-8" />
-    <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-    <title></title>
-    <link rel="stylesheet" type="text/css" href="index.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>推荐站点 · 摩尔缠论辅助工具</title>
+    <!-- Google AdSense (保留原广告) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6080553857226714" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0f0f1a;
+            font-family: 'Segoe UI', 'Roboto', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            color: #eef2ff;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* 导航栏 (与主页一致) */
+        .navbar {
+            background: rgba(18, 18, 28, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(66, 153, 225, 0.3);
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            flex-shrink: 0;
+        }
+        .logo-area h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #c084fc, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .logo-area p {
+            font-size: 0.65rem;
+            color: #8b9bcf;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #cbd5ff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: #60a5fa;
+        }
+        /* 主内容区 */
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+        .card {
+            background: rgba(26, 26, 38, 0.8);
+            backdrop-filter: blur(4px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(66, 153, 225, 0.3);
+            padding: 1.8rem;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(96, 165, 250, 0.6);
+        }
+        h2 {
+            font-size: 1.6rem;
+            color: #c084fc;
+            margin-bottom: 1rem;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+        }
+        .site-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        .site-list li {
+            margin: 1rem 0;
+            padding: 0.8rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 1rem;
+            transition: all 0.2s;
+        }
+        .site-list li:hover {
+            background: #2a2a3c;
+            transform: translateX(5px);
+        }
+        .site-list a {
+            color: #7dd3fc;
+            text-decoration: none;
+            font-size: 1.05rem;
+            font-weight: 500;
+            display: block;
+        }
+        .site-list a:hover {
+            color: #60a5fa;
+        }
+        .desc {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-top: 0.3rem;
+        }
+        .footer-note {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6b7280;
+            padding: 1rem;
+            border-top: 1px solid #222;
+            margin-top: 2rem;
+        }
+        @media (max-width: 640px) {
+            .navbar {
+                padding: 0.4rem 1rem;
+            }
+            .card {
+                padding: 1.2rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            .site-list a {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <nav>
-        <div class="top">
-            <ul style="text-align: center; vertical-align: top">
+    <div class="navbar">
+        <div class="logo-area">
+            <h1>📈 摩尔缠论 · 线段中枢</h1>
+            <p>F30线段 | 日线中枢</p>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">📊 线段+中枢</a>
+            <a href="meclyksp.html">📺 原课程视频</a>
+            <a href="goodsites.html" class="active">⭐ 推荐站点</a>
+            <a href="whattodo.html">📌 进阶路线</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>🔗 值得关注的缠论资源</h2>
+            <ul class="site-list">
                 <li>
-                    <a href="index.html" style='color:red'>F30线段+日线中枢</a>
+                    <a href="https://www.zhihu.com/column/c_1563528320268107776?utm_id=0" target="_blank" rel="noopener">
+                        🔥 败火 · 知乎专栏
+                    </a>
+                    <div class="desc">深入浅出的缠论实战解读，定期更新市场观点</div>
                 </li>
                 <li>
-                    <a href="meclyksp.html">摩尔缠论原课程视频</a>
-                </li>
-                <li>
-                    <a href="goodsites.html">不错的站点</a>
-                </li>
-                <li>
-                    <a href="whattodo.html">What-to-do next</a>
+                    <a href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzIyMzI0MTAxOA==&action=getalbum&album_id=1757505720264032261&scene=173&from_msgid=2652608465&from_itemidx=1&count=3&nolastread=1#wechat_redirect" target="_blank" rel="noopener">
+                        📘 摩缠实战 · 微信专辑
+                    </a>
+                    <div class="desc">摩尔缠论实战案例与线段分析，持续更新</div>
                 </li>
             </ul>
+            <p style="margin-top: 1.5rem; font-size: 0.75rem; color: #6b7280; text-align: center;">
+                💡 更多优质资源欢迎推荐，请联系维护者补充。
+            </p>
         </div>
-    </nav>
-    <a href="https://www.zhihu.com/column/c_1563528320268107776?utm_id=0" target="_blank"> 败火</a> <br />
-    <a href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzIyMzI0MTAxOA==&action=getalbum&album_id=1757505720264032261&scene=173&from_msgid=2652608465&from_itemidx=1&count=3&nolastread=1#wechat_redirect" target="_blank"> 摩缠实战</a> <br />
+    </div>
 
+    <div class="footer-note">
+        摩尔缠论辅助工具 | 精选学习资源
+    </div>
 </body>
 </html>

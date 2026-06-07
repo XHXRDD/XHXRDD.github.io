@@ -1,38 +1,163 @@
 ﻿<!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="zh-CN">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6080553857226714"
-            crossorigin="anonymous"></script>
-    <meta charset="utf-8" />
-    <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-    <title></title>
-    <link rel="stylesheet" type="text/css" href="index.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>摩尔缠论 · 原课程视频</title>
+    <!-- Google AdSense (保留原广告) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6080553857226714" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0f0f1a;
+            font-family: 'Segoe UI', 'Roboto', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            color: #eef2ff;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* 导航栏 (与主页一致) */
+        .navbar {
+            background: rgba(18, 18, 28, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(66, 153, 225, 0.3);
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            flex-shrink: 0;
+        }
+        .logo-area h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #c084fc, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .logo-area p {
+            font-size: 0.65rem;
+            color: #8b9bcf;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            color: #cbd5ff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: #60a5fa;
+        }
+        /* 主内容区 */
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+        .card {
+            background: rgba(26, 26, 38, 0.8);
+            backdrop-filter: blur(4px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(66, 153, 225, 0.3);
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(96, 165, 250, 0.6);
+        }
+        .card h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: #c084fc;
+            font-weight: 600;
+        }
+        .video-list {
+            list-style: none;
+        }
+        .video-list li {
+            margin: 1rem 0;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .video-list a {
+            color: #7dd3fc;
+            text-decoration: none;
+            font-size: 1.05rem;
+            display: block;
+            transition: 0.2s;
+        }
+        .video-list a:hover {
+            color: #60a5fa;
+            padding-left: 5px;
+        }
+        .footer-note {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6b7280;
+            padding: 1rem;
+            border-top: 1px solid #222;
+            margin-top: 2rem;
+        }
+        @media (max-width: 640px) {
+            .navbar {
+                padding: 0.4rem 1rem;
+            }
+            .card {
+                padding: 1.2rem;
+            }
+            .card h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <nav>
-        <div class="top">
-            <ul style="text-align: center; vertical-align: top">
-                <li>
-                    <a href="index.html" style='color:red'>F30线段+日线中枢</a>
-                </li>
-                <li>
-                    <a href="meclyksp.html">摩尔缠论原课程视频</a>
-                </li>
-                <li>
-                    <a href="goodsites.html">不错的站点</a>
-                </li>
-                <li>
-                    <a href="whattodo.html">What-to-do next</a>
-                </li>
+    <div class="navbar">
+        <div class="logo-area">
+            <h1>📈 摩尔缠论 · 线段中枢</h1>
+            <p>F30线段 | 日线中枢</p>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">📊 线段+中枢</a>
+            <a href="meclyksp.html" class="active">📺 原课程视频</a>
+            <a href="goodsites.html">⭐ 推荐站点</a>
+            <a href="whattodo.html">📌 进阶路线</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>🎬 摩尔缠论系列课程</h2>
+            <p style="margin-bottom: 1rem; color: #9ca3af;">以下链接来自「股资源」论坛，点击即可跳转查看对应期次视频。</p>
+            <ul class="video-list">
+                <li><a href="http://www.guziyuan.cn/thread-16299-1-1.html" target="_blank" rel="noopener">📘 基础二期 · 完整视频</a></li>
+                <li><a href="http://www.guziyuan.cn/thread-19867-1-1.html" target="_blank" rel="noopener">📗 基础三期 · 完整视频</a></li>
+                <li><a href="http://www.guziyuan.cn/thread-19894-1-1.html" target="_blank" rel="noopener">📙 高阶一期 · 完整视频</a></li>
+                <li><a href="http://www.guziyuan.cn/thread-87972-1-1.html" target="_blank" rel="noopener">📕 高阶二期 · 完整视频</a></li>
+                <li><a href="http://www.guziyuan.cn/thread-100639-1-1.html" target="_blank" rel="noopener">📔 高阶三期 · 完整视频</a></li>
             </ul>
         </div>
-    </nav>
-    <a href="http://www.guziyuan.cn/thread-16299-1-1.html"> 基础二期：</a> <br />
-    <a href="http://www.guziyuan.cn/thread-19867-1-1.html"> 基础三期：</a> <br />
-    <a href="http://www.guziyuan.cn/thread-19894-1-1.html"> 高阶一期：</a> <br />
-    <a href="http://www.guziyuan.cn/thread-87972-1-1.html"> 高阶二期：</a> <br />
-    <a href="http://www.guziyuan.cn/thread-100639-1-1.html">高阶三期：</a>
+        <p style="font-size: 0.75rem; text-align: center; color: #6b7280;">※ 课程资源为网友分享，仅供学习交流。</p>
+    </div>
 
+    <div class="footer-note">
+        缠论学习工具 | 专注线段与中枢分析
+    </div>
 </body>
 </html>

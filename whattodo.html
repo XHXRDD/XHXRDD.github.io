@@ -1,40 +1,143 @@
 ﻿<!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="zh-CN">
 <head>
-
-    <meta charset="utf-8" />
-    <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-    <title></title>
-    <link rel="stylesheet" type="text/css" href="index.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>进阶路线 · 摩尔缠论</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0f0f1a;
+            font-family: 'Segoe UI', Roboto, 'PingFang SC', sans-serif;
+            color: #eef2ff;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background: rgba(18, 18, 28, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(66, 153, 225, 0.3);
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+        }
+        .logo-area h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #c084fc, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .logo-area p { font-size: 0.65rem; color: #8b9bcf; }
+        .nav-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .nav-links a {
+            color: #cbd5ff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: #60a5fa; }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+        .card {
+            background: rgba(26, 26, 38, 0.8);
+            backdrop-filter: blur(4px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(66, 153, 225, 0.3);
+            padding: 1.8rem;
+        }
+        h2 {
+            font-size: 1.6rem;
+            color: #c084fc;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .roadmap {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+        .roadmap li {
+            margin: 1rem 0;
+            padding: 0.8rem 1rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 1rem;
+            border-left: 4px solid #3b82f6;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .roadmap li:hover {
+            background: #2a2a3c;
+            transform: translateX(5px);
+        }
+        .roadmap a {
+            color: #7dd3fc;
+            text-decoration: none;
+            display: block;
+        }
+        .roadmap a:hover {
+            color: #60a5fa;
+        }
+        .note {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #8b9bcf;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #2d3a5e;
+        }
+        @media (max-width: 640px) {
+            .navbar { padding: 0.4rem 1rem; }
+            .card { padding: 1.2rem; }
+            h2 { font-size: 1.3rem; }
+        }
+    </style>
 </head>
 <body>
-    <nav>
-        <div class="top">
-            <ul style="text-align: center; vertical-align: top">
-                <li>
-                    <a href="index.html" style='color:red'>F30线段+日线中枢</a>
-                </li>
-                <li>
-                    <a href="meclyksp.html">摩尔缠论原课程视频</a>
-                </li>
-                <li>
-                    <a href="goodsites.html">不错的站点</a>
-                </li>
-                <li>
-                    <a href="whattodo.html">What-to-do next</a>
-                </li>
-            </ul>
+    <div class="navbar">
+        <div class="logo-area">
+            <h1>📈 摩尔缠论 · 线段中枢</h1>
+            <p>F30线段 | 日线中枢</p>
         </div>
-    </nav>
+        <div class="nav-links">
+            <a href="index.html">📊 线段+中枢</a>
+            <a href="meclyksp.html">📺 原课程视频</a>
+            <a href="goodsites.html">⭐ 推荐站点</a>
+            <a href="whattodo.html" class="active">📌 进阶路线</a>
+        </div>
+    </div>
 
-    <a href="#"> 日线级别线段</a> <br />
-    <a href="#"> 走势终完美中枢</a> <br />
-    <a href="#"> 走势分类组合中枢</a> <br />
-    <a href="#"> 买卖点</a> <br />
-    <a href="#"> 日线，F30, F5三级别联立</a> <br />
-    <a href="#"> 选股</a> <br />
-    <a href="#">......</a>
+    <div class="container">
+        <div class="card">
+            <h2>🧭 缠论学习进阶路线</h2>
+            <p style="text-align: center; color: #9ca3af; margin-bottom: 1rem;">掌握线段与中枢之后，可以继续深入以下模块</p>
+            <ul class="roadmap">
+                <li>📐 <a href="#">日线级别线段划分</a> — 构建大级别视角</li>
+                <li>🌀 <a href="#">走势终完美中枢</a> — 深入理解中枢升级</li>
+                <li>🔀 <a href="#">走势分类组合中枢</a> — 多义性与组合规则</li>
+                <li>💰 <a href="#">三类买卖点</a> — 精确狙击买卖点</li>
+                <li>📊 <a href="#">日线 · F30 · F5 三级别联立</a> — 立体分析</li>
+                <li>🤖 <a href="#">选股模型</a> — 利用线段中枢筛选强势股</li>
+                <li>📚 <a href="#">缠论原文与进阶文献</a> — 回归理论本源</li>
+            </ul>
+            <div class="note">
+                ✨ 工具持续更新中，后续将逐步增加自动画线、买卖点提示等功能。
+            </div>
+        </div>
+    </div>
 
+    <div style="text-align: center; font-size: 0.7rem; color: #6b7280; padding: 1rem; border-top: 1px solid #222;">
+        摩尔缠论辅助工具 | 学习路线参考
+    </div>
 </body>
 </html>

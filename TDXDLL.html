@@ -1,46 +1,154 @@
 ﻿<!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="zh-CN">
 <head>
-    <meta charset="utf-8" />
-    <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-    <title></title>
-    <link rel="stylesheet" type="text/css" href="index.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>通达信DLL接入 · 摩尔缠论</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0f0f1a;
+            font-family: 'Segoe UI', Roboto, 'PingFang SC', sans-serif;
+            color: #eef2ff;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: rgba(18, 18, 28, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(66, 153, 225, 0.3);
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+        }
+        .logo-area h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #c084fc, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .logo-area p { font-size: 0.65rem; color: #8b9bcf; }
+        .nav-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .nav-links a {
+            color: #cbd5ff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: #60a5fa; }
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+        .card {
+            background: rgba(26, 26, 38, 0.8);
+            backdrop-filter: blur(4px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(66, 153, 225, 0.3);
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+        h2 {
+            font-size: 1.6rem;
+            color: #c084fc;
+            margin-bottom: 1rem;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+        }
+        h3 {
+            font-size: 1.2rem;
+            color: #90e0ff;
+            margin: 1.2rem 0 0.8rem 0;
+        }
+        .steps {
+            background: #1a1a2a;
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+        }
+        .steps li {
+            margin: 0.6rem 0;
+            line-height: 1.6;
+        }
+        a.download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            transition: 0.2s;
+        }
+        a.download-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(59,130,246,0.4);
+        }
+        .note {
+            background: rgba(59,130,246,0.15);
+            border-left: 3px solid #3b82f6;
+            padding: 0.8rem 1rem;
+            border-radius: 0.8rem;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+        @media (max-width: 640px) {
+            .navbar { padding: 0.4rem 1rem; }
+            .card { padding: 1.2rem; }
+            h2 { font-size: 1.3rem; }
+        }
+    </style>
 </head>
 <body>
-    <nav>
-        <div class="top">
-            <ul style="text-align: center; vertical-align: top">
-                <li>
-                    <a href="index.html" style='color:red'>F30线段+日线中枢</a>
-                </li>
-                <li>
-                    <a href="meclyksp.html">摩尔缠论原课程视频</a>
-                </li>
-                <li>
-                    <a href="goodsites.html">不错的站点</a>
-                </li>
-                <li>
-                    <a href="whattodo.html">What-to-do next</a>
-                </li>
-            </ul>
+    <div class="navbar">
+        <div class="logo-area">
+            <h1>📈 摩尔缠论 · 线段中枢</h1>
+            <p>F30线段 | 日线中枢</p>
         </div>
-    </nav>
+        <div class="nav-links">
+            <a href="index.html">📊 线段+中枢</a>
+            <a href="meclyksp.html">📺 原课程视频</a>
+            <a href="goodsites.html">⭐ 推荐站点</a>
+            <a href="whattodo.html">📌 进阶路线</a>
+        </div>
+    </div>
 
-    <h3>由于网页版的K线数据源可靠性不能100%保证， 简单实现了一个用通达信软件显示网站30分钟线段的DLL, 感兴趣的朋友可以下载试试</h3>
-    <a href="https://www.55188.com/forum.php?mod=redirect&goto=findpost&ptid=10746352&pid=170461249">下载地址</a>
+    <div class="container">
+        <div class="card">
+            <h2>🔧 通达信DLL辅助工具</h2>
+            <p>由于网页版K线数据源稳定性不可控，我们提供了通达信软件专用DLL，可稳定显示本站计算的30分钟线段与走势分类中枢。</p>
+            <div style="margin: 1.5rem 0;">
+                <a href="https://www.55188.com/forum.php?mod=redirect&goto=findpost&ptid=10746352&pid=170461249" target="_blank" rel="noopener" class="download-btn">⬇️ 下载 MCC.zip (论坛跳转)</a>
+            </div>
 
-    <h4>安装方法与一般的通达信dll类似......</h4>
-    <ol>
-        <li>解压缩MCC.ZIP</li>
-        <li>拷贝MCClient.dll 到 通达信的T0002\dlls 目录</li>
-        <li>用公式管理器导入公式文件MCC.tn6</li>
-        <li>绑定MCClient.dll 到第一号DLL</li>
-        <li>选择主图指标为导入的公式MCC</li>
-    </ol>
+            <h3>📖 安装步骤</h3>
+            <ol class="steps">
+                <li>解压缩 <code>MCC.zip</code> 文件</li>
+                <li>拷贝 <code>MCClient.dll</code> 到通达信安装目录的 <code>T0002\dlls</code> 文件夹</li>
+                <li>打开通达信公式管理器，导入公式文件 <code>MCC.tn6</code></li>
+                <li>绑定 <code>MCClient.dll</code> 到「第1号DLL」</li>
+                <li>选择主图指标为导入的「MCC」公式，即可显示线段与中枢</li>
+            </ol>
 
+            <div class="note">
+                💡 提示：若无法下载，请复制链接到浏览器打开。本工具仅供缠论学习者研究使用。
+            </div>
+        </div>
+    </div>
 
-    <!--img src="img/websitedemo.png"   -->
-
+    <div style="text-align: center; font-size: 0.7rem; color: #6b7280; padding: 1rem; border-top: 1px solid #222;">
+        摩尔缠论辅助工具 | 通达信DLL版
+    </div>
 </body>
 </html>

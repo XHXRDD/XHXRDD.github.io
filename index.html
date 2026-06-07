@@ -1,192 +1,548 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag() { dataLayer.push(arguments); }
-		gtag('js', new Date());
-
-		gtag('config', 'AW-11474748562');
-	</script>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
-	<meta http-equiv="X-UA-Compatible" content="IE=7" />
-	<meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-	<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval'; connect-src *; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; img-src * data:; font-src *;">
-
-	<title>摩尔缠论辅助学习工具</title>
-	<style>
-		body {
-			-webkit-text-size-adjust: 100%;
-		}
-
-		.st {
-			font-weight: bold;
-		}
-	</style>
-	<link rel="stylesheet" type="text/css" href="index.css" />
-
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name=”description" content=”Simple autocomplete pure vanilla Javascript library that's designed for speed,
-		  high versatility and seamless integration with wide range of projects and systems.”>
-	<meta name="keywords"
-		  content="autocomplete.js,autocomplete,simple autocomplete,pure vanilla javascript,vanilla js,javascript,js,library,speed,lightning fast,blazing fast,fast,search,suggestions,select,versatile,customizable,hackable,developer friendly,zero dependencies,lightweight,high integration,scalable,scalability,open source,github,javascript autocomplete,autocomplete javascript,autocompletejs,vanilla javascript library,easy to use autocomplete javascript library,fastest autocomplete javascript library,best autocomplete javascript library">
-	<meta name="subject" content="autoComplete Javascript Library">
-	<meta name="author" content="Tarek Raafat">
-	<meta name="copyright" content="Tarek Raafat">
-	<meta name="owner" content="Tarek Raafat">
-	<meta name="google-site-verification" content="UphDCSqXKDBZF8Uyot7RJpQUxqsdrp2GDZXgiORHwgs" />
-	<meta property="og:site_name" content="autoComplete.js">
-	<meta property="og:title" content="autoComplete.js">
-	<meta property="og:description" content="Simple autocomplete pure vanilla Javascript library.">
-	<meta property="og:type" content="product">
-	<meta property="og:url" content="https://tarekraafat.github.io/autoComplete.js/demo/">
-	<meta property="og:image" content="https://tarekraafat.github.io/autoComplete.js/img/autoComplete.js_Preview.png">
-	<meta property="og:image"
-		  content="https://tarekraafat.github.io/autoComplete.js/img/autoComplete.js_WidePreview.png">
-	<meta property="og:image" content="https://tarekraafat.github.io/autoComplete.js/img/autoComplete.init.png">
-	<meta property="og:image:type" content="image/png">
-	<meta property="og:image:width" content="100%">
-	<meta property="og:image:height" content="1200">
-	<meta property="fb:app_id" content="1482373115226718">
-	<meta name="viewport"
-		  content="width=40vw, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	<link rel="manifest" href="https://tarekraafat.github.io/autoComplete.js/manifest.json">
-	<link rel="apple-touch-icon" sizes="57x57"
-		  href="https://tarekraafat.github.io/autoComplete.js/img/icons/apple-icon-57x57.png">
-	<link rel="apple-touch-icon" sizes="60x60"
-		  href="https://tarekraafat.github.io/autoComplete.js/img/icons/apple-icon-60x60.png">
-	<link rel="apple-touch-icon" sizes="72x72"
-		  href="https://tarekraafat.github.io/autoComplete.js/img/icons/apple-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="76x76"
-		  href="https://tarekraafat.github.io/autoComplete.js/img/icons/apple-icon-76x76.png">
-	<link rel="apple-touch-icon" sizes="114x114"
-		  href="https://tarekraafat.github.io/autoComplete.js/img/icons/apple-icon-114x114.png">
-	<link rel="apple-touch-icon" sizes="120x120"
-		  href="https://tarekraafat.github.io/autoComplete.js/img/icons/apple-icon-120x120.png">
-	<link rel="apple-touch-icon" sizes="144x144"
-		  href="https://tarekraafat.github.io/autoComplete.js/img/icons/apple-icon-144x144.png">
-	<link rel="apple-touch-icon" sizes="152x152"
-		  href="https://tarekraafat.github.io/autoComplete.js/img/icons/apple-icon-152x152.png">
-	<link rel="apple-touch-icon" sizes="180x180"
-		  href="https://tarekraafat.github.io/autoComplete.js/img/icons/apple-icon-180x180.png">
-	<link rel="icon" type="image/png" sizes="192x192"
-		  href="https://tarekraafat.github.io/autoComplete.js/img/icons/android-icon-192x192.png">
-	<link rel="icon" type="image/png" sizes="32x32"
-		  href="https://tarekraafat.github.io/autoComplete.js/img/icons/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="96x96"
-		  href="https://tarekraafat.github.io/autoComplete.js/img/icons/favicon-96x96.png">
-	<link rel="icon" type="image/png" sizes="16x16"
-		  href="https://tarekraafat.github.io/autoComplete.js/img/icons/favicon-16x16.png">
-	<link rel="manifest" href="https://tarekraafat.github.io/autoComplete.js//manifest.json">
-	<meta name="msapplication-TileColor" content="#ffffff">
-	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-	<meta name="theme-color" content="#ffffff">
-	<link rel="stylesheet" type="text/css" media="screen"
-		  href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css">
-	<!-- <link rel="stylesheet" type="text/css" media="screen" href="./css/autoComplete.css"> -->
-	<link rel="stylesheet" type="text/css" media="screen" href="./css/main.css">
-	<link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>摩尔缠论 · 线段中枢分析工具（增强版）</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; overflow-x: hidden; }
+        body {
+            background: #0f0f1a;
+            font-family: 'Segoe UI', 'Roboto', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            color: #eef2ff;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .navbar {
+            background: rgba(18, 18, 28, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(66, 153, 225, 0.3);
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            flex-shrink: 0;
+            z-index: 20;
+        }
+        .logo-area h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #c084fc, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .logo-area p { font-size: 0.65rem; color: #8b9bcf; }
+        .nav-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .nav-links a {
+            color: #cbd5ff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover { color: #60a5fa; }
+        .search-section {
+            background: rgba(26, 26, 38, 0.9);
+            margin: 0.6rem 1rem 0.3rem 1rem;
+            border-radius: 2rem;
+            padding: 0.4rem 1rem;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(66, 153, 225, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 25;
+        }
+        .search-wrapper { flex: 3; min-width: 180px; position: relative; }
+        #autoComplete {
+            width: 100%;
+            padding: 0.6rem 1.2rem;
+            background: #1e1e2c;
+            border: 1px solid #2d3a5e;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+            color: #f0f3fa;
+            outline: none;
+        }
+        #autoComplete:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.3);
+        }
+        .search-info {
+            font-size: 0.7rem;
+            color: #8f9bb3;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .badge {
+            background: #2d2d44;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.65rem;
+        }
+        .current-stock {
+            background: #1e2a3a;
+            border-radius: 2rem;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #90e0ff;
+        }
+        /* 历史记录区域 */
+        .history-section {
+            margin: 0.2rem 1rem 0 1rem;
+            padding: 0.3rem 0.8rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            font-size: 0.7rem;
+            color: #8b9bcf;
+            background: rgba(18,18,28,0.6);
+            border-radius: 2rem;
+            backdrop-filter: blur(2px);
+        }
+        .history-label {
+            color: #8b9bcf;
+            letter-spacing: 1px;
+        }
+        .history-tag {
+            background: #1e2a3a;
+            border-radius: 1.2rem;
+            padding: 0.2rem 0.7rem;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.1s;
+            color: #cbd5ff;
+            border: 1px solid #2d3a5e;
+        }
+        .history-tag:hover {
+            background: #3b82f6;
+            color: white;
+            border-color: #60a5fa;
+        }
+        /* K线图容器（相对定位用于loading层） */
+        .chart-container {
+            flex: 1 1 auto;
+            margin: 0.2rem 1rem 0.2rem 1rem;
+            background: #00000022;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid rgba(66, 153, 225, 0.3);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+            min-height: calc(100vh - 140px);
+            position: relative;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #0a0a12;
+        }
+        /* 加载动画层 */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 30;
+            border-radius: 1rem;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #2d3a5e;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-text {
+            color: #eef2ff;
+            font-size: 0.85rem;
+        }
+        .footer-badge {
+            text-align: center;
+            padding: 0.8rem;
+            font-size: 0.7rem;
+            background: #0a0a10;
+            border-top: 1px solid #222;
+            margin-top: 0.5rem;
+        }
+        /* 候选列表宽度样式（保留原版） */
+        .autoComplete_wrapper { position: relative; z-index: 100 !important; width: 100%; }
+        .autoComplete_results {
+            z-index: 9999 !important;
+            background: #1e1e2c !important;
+            border: 1px solid #3b82f6 !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
+            max-height: 400px;
+            overflow-y: auto;
+            min-width: 360px !important;
+            width: auto !important;
+            max-width: 90vw !important;
+            left: 0 !important;
+        }
+        @media (max-width: 640px) {
+            .autoComplete_results { min-width: 75vw !important; }
+        }
+        .autoComplete_result {
+            background: #1e1e2c !important;
+            border-bottom: 1px solid #2d3a5e !important;
+            padding: 10px 14px !important;
+        }
+        .autoComplete_result:hover { background: #2a2a3c !important; }
+        .autoComplete_result span:first-child { min-width: 70px; flex-shrink: 0; }
+        .autoComplete_result span:nth-child(2) { flex: 2; }
+        .autoComplete_result span:last-child { flex-shrink: 0; min-width: 65px; text-align: right; }
+        .toast-msg {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1f2937dd;
+            backdrop-filter: blur(8px);
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: #bbf0ff;
+            pointer-events: none;
+            z-index: 10000;
+            border: 1px solid #3b82f6;
+        }
+        @media (max-width: 680px) {
+            .navbar { padding: 0.4rem 1rem; }
+            .search-section { margin: 0.5rem 0.8rem; flex-direction: column; align-items: stretch; }
+            .history-section { margin: 0.2rem 0.8rem; }
+            .chart-container { margin: 0.2rem 0.5rem; min-height: calc(100vh - 180px); }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css">
 </head>
 <body>
-	<!--
-		<nav>
-			<div class="top">
-				<ul style="text-align: center; vertical-align: top">
-					<li>
-						<a href="index.html" style='color:red'>F30线段+日线中枢</a>
-					</li>
-					<li>
-						<a href="meclyksp.html">摩尔缠论原课程视频</a>
-					</li>
-					<li>
-						<a href="goodsites.html">不错的站点</a>
-					</li>
-					<li>
-						<a href="whattodo.html">What-to-do next</a>
-					</li>
-				</ul>
-			</div>
-			<div class="container" style="vertical-align: top">
-				<div class="body" align="left">
-					<input id="autoComplete" type="text" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off"
-						   autocapitalize="off" maxlength="2048" tabindex="1">
-					<div class="selection"></div>
-				</div>
-			</div>
-			<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
-			<script src="./index.js"></script>
-		<p>如果输入股票代码感觉麻烦，请参考如下方式：</p>
-		</nav>
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.5" stroke="currentColor" class="w-4 h-4">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
-			</svg>
+<div class="navbar">
+    <div class="logo-area"><h1>📈 摩尔缠论 · 线段中枢</h1><p>F30线段 | 日线中枢</p></div>
+    <div class="nav-links">
+        <a href="TDXDLL.html">🔧 通达信DLL</a>
+        <a href="TDXExtraLink.html">🔗 外部链接</a>
+        <a href="meclyksp.html">📺 原课程</a>
+        <a href="goodsites.html">⭐ 推荐站点</a>
+    </div>
+</div>
+<div class="search-section">
+    <div class="search-wrapper"><input id="autoComplete" type="text" placeholder="🔍 代码/名称/简拼 (如 贵州茅台, 600519)" autocomplete="off"></div>
+    <div class="search-info">
+        <span class="badge">深市 000001~399999</span>
+        <span class="badge">沪市 600000~999999</span>
+        <span id="currentStockLabel" class="current-stock">📊 上证指数 999999</span>
+    </div>
+</div>
+<!-- 最近浏览历史区域 -->
+<div class="history-section" id="historySection">
+    <span class="history-label">📌 最近浏览：</span>
+    <div id="historyTags" style="display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
+</div>
+<div class="chart-container" id="chartContainer">
+    <iframe id="stockChartFrame" src="https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?symbol=999999.sh&v=20240101" title="日K线+缠论线段中枢" loading="lazy"></iframe>
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+        <div class="loading-text">加载K线数据中...</div>
+    </div>
+</div>
+<div class="footer-badge">
+    <a href="https://info.flagcounter.com/1iAv" target="_blank" rel="noopener"><img src="https://s11.flagcounter.com/count2/1iAv/bg_0F0F1A/txt_9CA3AF/border_2D3A5E/columns_2/maxflags_10/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="访问统计" border="0"></a>
+    <span style="margin-left: 8px; color:#6b7280;">📜 向下滚动可见统计</span>
+</div>
+<div id="globalToast" class="toast-msg" style="opacity:0; visibility: hidden;"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
+<script>
+    (function() {
+        // ----- DOM 元素 -----
+        let currentFrame = document.getElementById('stockChartFrame');
+        let stockLabel = document.getElementById('currentStockLabel');
+        let toastEl = document.getElementById('globalToast');
+        let loadingOverlay = document.getElementById('loadingOverlay');
+        let historyTagsContainer = document.getElementById('historyTags');
 
-	-->
+        // ----- 工具函数 -----
+        function showMessage(msg, isError = false) {
+            if(!toastEl) return;
+            toastEl.textContent = msg;
+            toastEl.style.backgroundColor = isError ? '#b91c1ccc' : '#1f2937dd';
+            toastEl.style.opacity = '1';
+            toastEl.style.visibility = 'visible';
+            setTimeout(() => { toastEl.style.opacity = '0'; toastEl.style.visibility = 'hidden'; }, 2500);
+        }
 
+        // 显示/隐藏 loading 动画
+        function showLoading(show) {
+            if (!loadingOverlay) return;
+            loadingOverlay.style.display = show ? 'flex' : 'none';
+        }
 
-	<div class="gridline">
-		<div class="left" style="vertical-align: top">
-			<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-				<path fill="none" d="M0 0h24v24H0z"></path>
-				<path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
-			</svg>
-			<a href="TDXDLL.html" style="font-size: 24px; color:red" align="left">如何用通达信DLL访问本站</a>
+        // 加载 iframe 并处理 loading 状态
+        function setIframeSrc(url, callback) {
+            showLoading(true);
+            currentFrame.src = url;
+            // 监听 iframe 加载完成
+            const onLoad = () => {
+                showLoading(false);
+                currentFrame.removeEventListener('load', onLoad);
+                if (callback) callback();
+            };
+            currentFrame.addEventListener('load', onLoad);
+            // 超时保护：10秒后强制隐藏loading
+            setTimeout(() => {
+                if (loadingOverlay && loadingOverlay.style.display === 'flex') {
+                    showLoading(false);
+                    console.warn('iframe 加载超时');
+                }
+            }, 10000);
+        }
 
-		</div>
-		<div class="middle">
-			<div class="container" style="vertical-align: top">
-				<div class="body" align="center">
-					<input id="autoComplete" type="text" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off"
-						   autocapitalize="off" maxlength="2048" tabindex="1">
-					<div class="selection"></div>
-				</div>
-			</div>
-			<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
-			<script src="./index.js"></script>
-		</div>
+        // 核心：切换股票（只更新iframe，不打开新窗口）
+        function loadStockKLineInPlace(code, stockName, saveToHistory = true) {
+            if (!code || code.length !== 6 || !/^\d+$/.test(code)) {
+                showMessage('❌ 请输入6位数字代码', true);
+                return false;
+            }
+            let marketSuffix = '', marketType = '';
+            const codeNum = parseInt(code, 10);
+            if (codeNum > 0 && codeNum < 400000) {
+                marketSuffix = '.sz';
+                marketType = '深市';
+            } else if (codeNum > 599999 && codeNum < 1000000) {
+                marketSuffix = '.sh';
+                marketType = '沪市';
+            } else {
+                showMessage('❌ 无效A股代码 (深:000001-399999, 沪:600000-999999)', true);
+                return false;
+            }
+            const symbolFull = code + marketSuffix;
+            const targetUrl = `https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?symbol=${symbolFull}&v=${Date.now()}`;
+            
+            // 更新 iframe（带动画）
+            setIframeSrc(targetUrl);
+            
+            const displayName = stockName ? `${stockName} ${code}` : `${code} (${marketType})`;
+            stockLabel.innerHTML = `📈 当前: ${displayName}`;
+            showMessage(`✅ 已切换至 ${displayName}`, false);
+            
+            // 保存到历史记录（若需要）
+            if (saveToHistory) {
+                addToHistory({ code: code, name: stockName || code });
+            }
+            return true;
+        }
 
-		<div class="right" style="vertical-align: top">
-			<a href="TDXExtraLink.html" style="font-size: 25px; color: red" align="right">如何用通达信外部链接方式访问本站</a>
-		</div>
-	</div>
-	<div class="grid">
-		<div class="left-up">
-			<iframe align="center" width="100%" height="100%" id="content-right-up" src="https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?&symbol=999999.sh&t=123456" frameborder="yes" border="1" marginwidth="0" marginheight="0" scrolling="no"></iframe>
-		</div>
-
-	</div>
-
-	<a align="bottom" href="https://info.flagcounter.com/1iAv"><img align="bottom" src="https://s11.flagcounter.com/count2/1iAv/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_10/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
-
-
-	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0" aria-hidden="true" id="__SVG_SPRITE_NODE__">
-		<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="vab-icon-funds-line"><path fill="none" d="M0 0h24v24H0z"></path><path d="M4.406 14.523l3.402-3.402 2.828 2.829 3.157-3.157L12 9h5v5l-1.793-1.793-4.571 4.571-2.828-2.828-2.475 2.474a8 8 0 1 0-.927-1.9zm-1.538 1.558l-.01-.01.004-.004A9.965 9.965 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10c-4.07 0-7.57-2.43-9.132-5.919z"></path></symbol>
-		<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 400" id="vab-icon-vab">
-			<g id="vab-icon-vab_PathID_1" transform="matrix(10.7099, 0, 0, 10.7099, 76.4, 396.15)" opacity="1">
-				<path style="fill: #41b882; fill-opacity: 1;" d="M3.75 -36.65L18.4 -36.65Q22.75 -36.65 24.85 -36.25Q27 -35.9 28.7 -34.75Q30.4 -33.6 31.5 -31.7Q32.65 -29.8 32.65 -27.4Q32.65 -24.85 31.25 -22.7Q29.85 -20.55 27.5 -19.5Q30.85 -18.5 32.65 -16.15Q34.45 -13.8 34.45 -10.6Q34.45 -8.1 33.25 -5.75Q32.1 -3.4 30.1 -1.95Q28.1 -0.55 25.15 -0.25Q23.3 -0.05 16.2 0L3.75 0L3.75 -36.65M11.15 -30.55L11.15 -22.1L16 -22.1Q20.3 -22.1 21.35 -22.2Q23.25 -22.4 24.35 -23.5Q25.45 -24.6 25.45 -26.35Q25.45 -28.05 24.5 -29.1Q23.55 -30.2 21.7 -30.4Q20.6 -30.55 15.4 -30.55L11.15 -30.55M11.15 -16L11.15 -6.2L18 -6.2Q22 -6.2 23.05 -6.4Q24.7 -6.7 25.75 -7.85Q26.8 -9.05 26.8 -11Q26.8 -12.65 26 -13.8Q25.2 -14.95 23.65 -15.45Q22.15 -16 17.1 -16L11.15 -16"></path>
-			</g>
-			<g id="vab-icon-vab_PathID_2" transform="matrix(10.7099, 0, 0, 10.7099, 76.4, 396.15)" opacity="1">
-			</g>
-			<g id="vab-icon-vab_PathID_3" transform="matrix(5.31826, 0, 0, 2.59618, 172.9, 161.55)" opacity="1">
-				<path style="fill: #35495e; fill-opacity: 1;" d="M3.75 -36.65L17.25 -36.65Q21.8 -36.65 24.2 -35.95Q27.45 -35 29.75 -32.55Q32.05 -30.15 33.25 -26.6Q34.45 -23.1 34.45 -17.95Q34.45 -13.45 33.3 -10.15Q31.95 -6.15 29.4 -3.7Q27.45 -1.8 24.2 -0.75Q21.75 0 17.65 0L3.75 0L3.75 -36.65M11.15 -30.45L11.15 -6.2L16.65 -6.2Q19.75 -6.2 21.1 -6.55Q22.9 -6.95 24.1 -8Q25.3 -9.1 26.05 -11.55Q26.8 -14.05 26.8 -18.3Q26.8 -22.55 26.05 -24.8Q25.3 -27.1 23.95 -28.35Q22.6 -29.65 20.5 -30.1Q18.95 -30.45 14.45 -30.45L11.15 -30.45"></path>
-			</g>
-			<g id="vab-icon-vab_PathID_4" transform="matrix(5.31826, 0, 0, 2.59618, 172.9, 161.55)" opacity="1">
-			</g>
-			<g id="vab-icon-vab_PathID_5" transform="matrix(5.78477, 0, 0, 3.1825, 171.7, 333.8)" opacity="1">
-				<path style="fill: #35495e; fill-opacity: 1;" d="M3.75 -36.65L17.25 -36.65Q21.8 -36.65 24.2 -35.95Q27.45 -35 29.75 -32.55Q32.05 -30.15 33.25 -26.6Q34.45 -23.1 34.45 -17.95Q34.45 -13.45 33.3 -10.15Q31.95 -6.15 29.4 -3.7Q27.45 -1.8 24.2 -0.75Q21.75 0 17.65 0L3.75 0L3.75 -36.65M11.15 -30.45L11.15 -6.2L16.65 -6.2Q19.75 -6.2 21.1 -6.55Q22.9 -6.95 24.1 -8Q25.3 -9.1 26.05 -11.55Q26.8 -14.05 26.8 -18.3Q26.8 -22.55 26.05 -24.8Q25.3 -27.1 23.95 -28.35Q22.6 -29.65 20.5 -30.1Q18.95 -30.45 14.45 -30.45L11.15 -30.45"></path>
-			</g>
-			<g id="vab-icon-vab_PathID_6" transform="matrix(5.78477, 0, 0, 3.1825, 171.7, 333.8)" opacity="1">
-			</g>
-		</symbol>
-		<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="vab-icon-vuejs-fill">
-			<path fill="none" d="M0 0h24v24H0z"></path>
-			<path d="M1 3h4l7 12 7-12h4L12 22 1 3zm8.667 0L12 7l2.333-4h4.035L12 14 5.632 3h4.035z"></path>
-		</symbol>
-	</svg>
-
+        // ----- 历史记录管理 (localStorage) -----
+        const HISTORY_KEY = 'recent_stocks';
+        const MAX_HISTORY = 5;
+        
+        function getHistory() {
+            const stored = localStorage.getItem(HISTORY_KEY);
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch(e) { return []; }
+            }
+            return [];
+        }
+        
+        function saveHistory(history) {
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, MAX_HISTORY)));
+            renderHistoryTags();
+        }
+        
+        function addToHistory(stock) {
+            if (!stock || !stock.code) return;
+            let history = getHistory();
+            // 去重（基于代码）
+            history = history.filter(item => item.code !== stock.code);
+            // 插入到最前
+            history.unshift({ code: stock.code, name: stock.name });
+            if (history.length > MAX_HISTORY) history.pop();
+            saveHistory(history);
+        }
+        
+        function renderHistoryTags() {
+            if (!historyTagsContainer) return;
+            const history = getHistory();
+            if (history.length === 0) {
+                historyTagsContainer.innerHTML = '<span style="color:#5f6b8a;">暂无</span>';
+                return;
+            }
+            historyTagsContainer.innerHTML = history.map(item => {
+                const displayName = item.name && item.name !== item.code ? item.name : item.code;
+                return `<div class="history-tag" data-code="${item.code}" data-name="${item.name || ''}">📌 ${displayName}</div>`;
+            }).join('');
+            // 绑定点击事件
+            document.querySelectorAll('.history-tag').forEach(tag => {
+                tag.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const code = tag.getAttribute('data-code');
+                    const name = tag.getAttribute('data-name');
+                    if (code) loadStockKLineInPlace(code, name, true);
+                });
+            });
+        }
+        
+        // ----- 股票列表缓存（24小时有效）-----
+        const CACHE_KEY = 'stock_list_cache';
+        const CACHE_EXPIRE = 24 * 60 * 60 * 1000; // 24小时
+        
+        async function fetchStockListWithCache() {
+            const cached = localStorage.getItem(CACHE_KEY);
+            if (cached) {
+                try {
+                    const { data, timestamp } = JSON.parse(cached);
+                    if (Date.now() - timestamp < CACHE_EXPIRE) {
+                        console.log('使用缓存股票列表');
+                        showMessage('📦 股票列表已从本地缓存加载', false);
+                        return data;
+                    } else {
+                        console.log('缓存过期，重新获取');
+                    }
+                } catch(e) {}
+            }
+            // 无缓存或过期，发起网络请求
+            showMessage('🔄 首次加载股票列表，请稍候...', false);
+            const response = await fetch("https://zettathings.top/stocklist.json");
+            if (!response.ok) throw new Error("列表加载失败");
+            const data = await response.json();
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ data: data, timestamp: Date.now() }));
+            showMessage('✅ 股票列表已更新并缓存', false);
+            return data;
+        }
+        
+        // ----- autoComplete 初始化 -----
+        let autoCompleteJS = null;
+        const initAutoComplete = async () => {
+            try {
+                const stockData = await fetchStockListWithCache();
+                document.getElementById("autoComplete").setAttribute("placeholder", "📊 输入代码/名称/简拼...");
+                autoCompleteJS = new autoComplete({
+                    data: {
+                        src: stockData,
+                        keys: ["code","name","jp"],
+                        cache: true,
+                        filter: (list) => {
+                            const filtered = [];
+                            const map = new Map();
+                            for(const item of list) {
+                                if(!map.has(item.match)) {
+                                    map.set(item.match, item);
+                                    filtered.push(item);
+                                }
+                            }
+                            return filtered;
+                        }
+                    },
+                    placeHolder: "🔎 搜索股票",
+                    resultsList: {
+                        maxResults: 18,
+                        noResults: true,
+                        tabSelect: true,
+                        element: (list, data) => {
+                            if(data.results.length===0) {
+                                const info = document.createElement("div");
+                                info.innerHTML = `<span style="color:#aaa;">💡 未找到 "${data.query}"</span>`;
+                                info.style.padding = "0.8rem";
+                                info.style.textAlign = "center";
+                                list.prepend(info);
+                            }
+                        }
+                    },
+                    resultItem: {
+                        element: (item, data) => {
+                            item.style = "display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; gap: 12px; font-size: 14px; cursor: pointer;";
+                            item.innerHTML = `<span style="font-weight:600; min-width:70px; color:#facc15;">${data.value.code}</span><span style="flex:2; color:#7dd3fc; font-weight:600;">${data.value.name}</span><span style="color:#9ca3af; font-family:monospace; white-space: nowrap;">${data.value.jp || ''}</span>`;
+                        },
+                        highlight: true
+                    },
+                    events: {
+                        input: {
+                            selection: (event) => {
+                                const feedback = event.detail;
+                                if(feedback && feedback.selection) {
+                                    const selected = feedback.selection.value;
+                                    if(selected && selected.code && selected.code.length===6) {
+                                        loadStockKLineInPlace(selected.code, selected.name, true);
+                                    } else {
+                                        showMessage("选择无效", true);
+                                    }
+                                }
+                                autoCompleteJS.input.blur();
+                                autoCompleteJS.input.value = '';
+                            },
+                            focus() {
+                                if(autoCompleteJS.input.value.length) autoCompleteJS.start();
+                            }
+                        }
+                    },
+                    searchEngine: "strict"
+                });
+                // 渲染历史记录
+                renderHistoryTags();
+            } catch(err) {
+                console.error(err);
+                document.getElementById("autoComplete").setAttribute("placeholder", "⚠️ 股票列表加载失败");
+                showMessage("无法获取股票列表，请刷新页面重试", true);
+            }
+        };
+        
+        initAutoComplete();
+        
+        // 回车搜索
+        const inputEl = document.getElementById("autoComplete");
+        if(inputEl) {
+            inputEl.addEventListener("keypress", (e) => {
+                if(e.key==="Enter") {
+                    e.preventDefault();
+                    const val = inputEl.value.trim();
+                    if(val.length===6 && /^\d+$/.test(val)) {
+                        loadStockKLineInPlace(val, '', true);
+                        inputEl.value = '';
+                        if(autoCompleteJS) autoCompleteJS.close();
+                    } else if(val.length>0) {
+                        showMessage("请输入6位数字代码后按回车", true);
+                    }
+                }
+            });
+        }
+        
+        // 初始时加载一次历史记录，并确保当前显示的股票也加入历史（上证指数）
+        window.addEventListener('load', () => {
+            // 将默认的上证指数也记录到历史中（如果还没有）
+            const defaultCode = '999999';
+            const defaultName = '上证指数';
+            let history = getHistory();
+            const exists = history.some(item => item.code === defaultCode);
+            if (!exists) {
+                addToHistory({ code: defaultCode, name: defaultName });
+            } else {
+                renderHistoryTags();
+            }
+        });
+    })();
+</script>
 </body>
-    </html>
+</html>

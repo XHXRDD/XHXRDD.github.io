@@ -1,47 +1,158 @@
 ﻿<!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="zh-CN">
 <head>
-    <meta charset="utf-8" />
-    <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-    <title></title>
-    <link rel="stylesheet" type="text/css" href="index.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>通达信外部链接 · 摩尔缠论</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0f0f1a;
+            font-family: 'Segoe UI', Roboto, 'PingFang SC', sans-serif;
+            color: #eef2ff;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: rgba(18, 18, 28, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(66, 153, 225, 0.3);
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+        }
+        .logo-area h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #c084fc, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .logo-area p { font-size: 0.65rem; color: #8b9bcf; }
+        .nav-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .nav-links a {
+            color: #cbd5ff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover { color: #60a5fa; }
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+        .card {
+            background: rgba(26, 26, 38, 0.8);
+            backdrop-filter: blur(4px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(66, 153, 225, 0.3);
+            padding: 1.8rem;
+        }
+        .step-box {
+            background: #1a1a2a;
+            border-radius: 1rem;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+        }
+        .step-title {
+            color: #facc15;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        img {
+            max-width: 100%;
+            border-radius: 0.8rem;
+            margin: 0.8rem 0;
+            border: 1px solid #2d3a5e;
+            background: #00000033;
+        }
+        code {
+            background: #00000066;
+            padding: 0.2rem 0.4rem;
+            border-radius: 8px;
+            font-family: monospace;
+            color: #facc15;
+        }
+        .link-url {
+            background: #0f0f1a;
+            padding: 0.5rem;
+            border-radius: 0.8rem;
+            font-family: monospace;
+            word-break: break-all;
+            border: 1px solid #3b82f6;
+            font-size: 0.85rem;
+        }
+        @media (max-width: 640px) {
+            .navbar { padding: 0.4rem 1rem; }
+            .card { padding: 1.2rem; }
+        }
+    </style>
 </head>
 <body>
-    <nav>
-        <div class="top">
-            <ul style="text-align: center; vertical-align: top">
-                <li>
-                    <a href="index.html" style='color:red'>F30线段+日线中枢</a>
-                </li>
-                <li>
-                    <a href="meclyksp.html">摩尔缠论原课程视频</a>
-                </li>
-                <li>
-                    <a href="goodsites.html">不错的站点</a>
-                </li>
-                <li>
-                    <a href="whattodo.html">What-to-do next</a>
-                </li>
-            </ul>
+    <div class="navbar">
+        <div class="logo-area">
+            <h1>📈 摩尔缠论 · 线段中枢</h1>
+            <p>F30线段 | 日线中枢</p>
         </div>
-    </nav>
-    <div class="grid">
-        <div class="left-up">
-            <h4>配置步骤： </h4>
-            <h5>1. 通达信菜单 选项->系统设置（Ctrl+ D） </h5>
-            <img src="img/systemsettings.png">
-            <h5>2. 点击tab 链接->添加 </h5>
-            <img src="img/extralinkadding.png">
-            <h5>3. 链接描述：  任意起一个自己喜欢的名字，这里设为“摩尔缠论”</h5>
-            <h5>4. 链接地址： https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?symbol=xxxxxx.##sc## </h5>
-            <h5>5. 点击确定 </h5>
-            <img src="img/mooresegmentportal.png">
-            <h4>使用方式： </h4>
-            <h5>去到一只股票的分时图，侧边栏 点击摩尔缠论标签， 则会在浏览器中开一个新窗口显示这只股票相应的F30线段 + 走势分类中枢 </h5>
-            <img src="img/websitedemo.png">
+        <div class="nav-links">
+            <a href="index.html">📊 线段+中枢</a>
+            <a href="meclyksp.html">📺 原课程视频</a>
+            <a href="goodsites.html">⭐ 推荐站点</a>
+            <a href="whattodo.html">📌 进阶路线</a>
         </div>
     </div>
 
+    <div class="container">
+        <div class="card">
+            <h2 style="color: #c084fc; margin-bottom: 1rem;">🔗 通达信外部链接配置指南</h2>
+            <p>通过通达信「外部链接」功能，直接在软件内一键打开本站的缠论K线图。</p>
+
+            <div class="step-box">
+                <div class="step-title">📌 步骤 1</div>
+                <p>打开通达信，菜单栏选择 <strong>选项 → 系统设置</strong> (或按快捷键 <code>Ctrl + D</code>)</p>
+                <img src="img/systemsettings.png" alt="系统设置界面" loading="lazy">
+            </div>
+
+            <div class="step-box">
+                <div class="step-title">📌 步骤 2</div>
+                <p>点击顶部标签 <strong>「链接」</strong> → 点击右下角 <strong>「添加」</strong> 按钮</p>
+                <img src="img/extralinkadding.png" alt="添加外部链接" loading="lazy">
+            </div>
+
+            <div class="step-box">
+                <div class="step-title">📌 步骤 3</div>
+                <p><strong>链接描述：</strong> 输入任意名称，例如 <code>摩尔缠论</code><br>
+                <strong>链接地址：</strong> 填入以下内容（支持通达信变量 ##sc## 自动代入当前股票代码）</p>
+                <div class="link-url">
+                    https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?symbol=xxxxxx.##sc##
+                </div>
+                <p style="margin-top: 0.5rem; font-size: 0.8rem;">✅ 其中 <code>xxxxxx</code> 部分替换为 <code>000001</code> 即可，通达信会自动将 ##sc## 转换为当前股票代码。</p>
+            </div>
+
+            <div class="step-box">
+                <div class="step-title">📌 步骤 4</div>
+                <p>点击确定保存。然后在任意个股的 <strong>分时图界面</strong>，右侧侧边栏会出现「摩尔缠论」按钮，点击即可在浏览器中打开本站线段中枢图。</p>
+                <img src="img/mooresegmentportal.png" alt="侧边栏示例" loading="lazy">
+                <img src="img/websitedemo.png" alt="效果演示" loading="lazy">
+            </div>
+
+            <div style="background: #0f172a; border-radius: 1rem; padding: 0.8rem; margin-top: 1rem; text-align: center; font-size: 0.8rem;">
+                💡 提示：如果图片未加载，请确保 <code>img/</code> 目录下存在对应截图文件。
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; font-size: 0.7rem; color: #6b7280; padding: 1rem; border-top: 1px solid #222;">
+        摩尔缠论辅助工具 | 通达信外部链接版
+    </div>
 </body>
 </html>
