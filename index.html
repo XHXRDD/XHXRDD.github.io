@@ -186,8 +186,8 @@
             border-top: 1px solid #222;
             margin-top: 0.5rem;
         }
-        /* 候选列表宽度样式（保留原版） */
-        .autoComplete_wrapper { position: relative; z-index: 100 !important; width: 100%; }
+        /* 候选列表宽度样式（改为窄显示，显示代码/名称/简拼） */
+        .autoComplete_wrapper { position: relative; z-index: 100 !important; width: auto; max-width: 480px; }
         .autoComplete_results {
             z-index: 9999 !important;
             background: #1e1e2c !important;
@@ -195,9 +195,9 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
             max-height: 400px;
             overflow-y: auto;
-            min-width: 360px !important;
+            min-width: 320px !important;
             width: auto !important;
-            max-width: 90vw !important;
+            max-width: 95vw !important;
             left: 0 !important;
         }
         @media (max-width: 640px) {
@@ -206,12 +206,16 @@
         .autoComplete_result {
             background: #1e1e2c !important;
             border-bottom: 1px solid #2d3a5e !important;
-            padding: 10px 14px !important;
+            padding: 8px 12px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            font-size: 13px !important;
         }
         .autoComplete_result:hover { background: #2a2a3c !important; }
-        .autoComplete_result span:first-child { min-width: 70px; flex-shrink: 0; }
-        .autoComplete_result span:nth-child(2) { flex: 2; }
-        .autoComplete_result span:last-child { flex-shrink: 0; min-width: 65px; text-align: right; }
+        .autoComplete_result span:first-child { min-width: 64px; flex-shrink: 0; font-weight:700; color:#facc15; }
+        .autoComplete_result span:nth-child(2) { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color:#7dd3fc; }
+        .autoComplete_result span:last-child { flex-shrink: 0; min-width: 64px; text-align: right; color:#9ca3af; font-family: monospace; }
         .toast-msg {
             position: fixed;
             bottom: 20px;
