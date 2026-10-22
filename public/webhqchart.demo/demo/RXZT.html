@@ -245,7 +245,7 @@
                     url: obj.Url,
                     dataType: "text",
                     jsonp: false,
-                    async: false,
+                    async: true,
                     success: function(recvData) {
                         try {
                             var jsonData = JSON.parse(recvData);
