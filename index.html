@@ -273,7 +273,7 @@
     </div>
 </div>
 <div class="footer-badge">
-    <a href="https://info.flagcounter.com/1iAv" target="_blank" rel="noopener"><img src="https://s11.flagcounter.com/count2/1iAv/bg_0F0F1A/txt_9CA3AF/border_2D3A5E/columns_2/maxflags_10/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="访问统计" border="0"></a>
+    <a href="https://info.flagcounter.com/1iAv" target="_blank" rel="noopener"><img id="pageFlagCounter" data-src="https://s11.flagcounter.com/count2/1iAv/bg_0F0F1A/txt_9CA3AF/border_2D3A5E/columns_2/maxflags_10/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="访问统计" border="0"></a>
     <span style="margin-left: 8px; color:#6b7280;">📜 向下滚动可见统计</span>
 </div>
 <div id="globalToast" class="toast-msg" style="opacity:0; visibility: hidden;"></div>
@@ -287,6 +287,24 @@
         let toastEl = document.getElementById('globalToast');
         let loadingOverlay = document.getElementById('loadingOverlay');
         let historyTagsContainer = document.getElementById('historyTags');
+
+        function loadPageFlagCounter() {
+            const counter = document.getElementById('pageFlagCounter');
+            if (!counter || counter.hasAttribute('src')) return;
+            counter.src = counter.dataset.src;
+        }
+
+        window.addEventListener('message', (event) => {
+            if (event.origin !== new URL(currentFrame.src).origin ||
+                event.source !== currentFrame.contentWindow ||
+                !event.data || event.data.type !== 'kline-data-rendered') return;
+
+            if ('requestIdleCallback' in window) {
+                window.requestIdleCallback(loadPageFlagCounter, { timeout: 2000 });
+            } else {
+                setTimeout(loadPageFlagCounter, 0);
+            }
+        });
 
         // ----- 工具函数 -----
         function showMessage(msg, isError = false) {
