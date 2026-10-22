@@ -237,8 +237,21 @@
 
             var obj = GetKLineApiUrl(symbol, period, right, null);
 
-            // 重试次数
-            var retries = 2;
+            var maxAttempts = 3;
+            var retryDelayMs = 500;
+            function retryOrFail(attempt, error) {
+                if (attempt >= maxAttempts) {
+                    console.error('行情数据请求在 ' + attempt + ' 次尝试后仍失败:', error);
+                    return;
+                }
+
+                var delay = retryDelayMs * attempt;
+                console.warn('行情数据请求失败，' + delay + 'ms 后进行第 ' + (attempt + 1) + ' 次尝试:', error);
+                setTimeout(function() {
+                    doRequest(attempt + 1);
+                }, delay);
+            }
+
             function doRequest(attempt) {
                 $.ajax({
                     type: "get",
@@ -251,19 +264,11 @@
                             var jsonData = JSON.parse(recvData);
                             RecvHistoryData(jsonData, callback, { Data: data, Obj: obj });
                         } catch(e) {
-                            console.error('JSON parse error:', e);
-                            if (attempt < retries) {
-                                console.log('Retrying request, attempt:', attempt + 1);
-                                doRequest(attempt + 1);
-                            }
+                            retryOrFail(attempt, e);
                         }
                     },
                     error: function(xhr, status, err) {
-                        console.error('东方财富K线接口请求失败:', status, err);
-                        if (attempt < retries) {
-                            console.log('Retrying request, attempt:', attempt + 1);
-                            doRequest(attempt + 1);
-                        }
+                        retryOrFail(attempt, new Error('东方财富K线接口请求失败: ' + status + ' ' + err));
                     }
                 });
             }
