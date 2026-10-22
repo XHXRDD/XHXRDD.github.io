@@ -302,6 +302,7 @@
                 if (request.Data.indexname == 'Moore线段') {
                     var hqchart = data.HQChart;
                     var kData = hqchart.ChartPaint[0].Data;
+                    data.PreventDefault = true;
 
                     var line1 =
                     {
@@ -321,132 +322,67 @@
                         Draw: { DrawType: 'MULTI_LINE', DrawData: [], LineWidth: 3, } //绘制线段数组
                     };
 
-                    var ZSpoint, XDpoint;
                     var symbol = getURLParams('symbol');
                     if (symbol == null) symbol = '002981.sz';
-                    // 取回ZSFLZS数据：
-                    $.ajax({
-                        type: "get",
-                        url: "https://zettathings.top/public/ZSFLZS/" + symbol + ".json",
-                        dataType: "json",
-                        async: false,
-                        success: function (data) {
-                            ZSpoint = data;
+                    const indicatorTypes = ['ZSFLZS', 'F30XD', 'ZWMZS', 'RXXD'];
+                    Promise.all(indicatorTypes.map(function(type) {
+                        return fetch('https://zettathings.top/public/' + type + '/' + symbol + '.json')
+                            .then(function(response) {
+                                if (!response.ok) throw new Error(type + ' 请求失败: HTTP ' + response.status);
+                                return response.json();
+                            });
+                    })).then(function(indicatorData) {
+                        var ZSpoint = indicatorData[0];
+                        var XDpoint = indicatorData[1];
+                        var ZWMZSpoint = indicatorData[2];
+                        var RXXDpoint = indicatorData[3];
+
+                        var lastEnding = 0;
+                        var curpoint = JSON.parse(JSON.stringify(ZSpoint));
+
+                        for (let i = 0; i < ZSpoint.Point.length; i++) {
+                            if (ZSpoint.Point[i].Value == 0 || ZSpoint.Point[i].Value == -1) {
+                                var tmppointcontent = curpoint.Point.slice(lastEnding, i);
+                                curpoint.Point = tmppointcontent;
+                                curpoint.Color = ZSpoint.Point[i].Value == 0 ? "rgb(244, 0, 0)" : "rgb(0, 244, 0)";
+                                lastEnding = i + 1;
+                                line2.Draw.DrawData.push(curpoint);
+                                curpoint = JSON.parse(JSON.stringify(ZSpoint));
+                            }
                         }
+
+                        XDpoint.Color = "rgb(255, 255, 0)";
+                        line1.Draw.DrawData.push(XDpoint);
+
+                        var lastEndingzwm = 0;
+                        var curpointzwm = JSON.parse(JSON.stringify(ZWMZSpoint));
+
+                        for (let i = 0; i < ZWMZSpoint.Point.length; i++) {
+                            if (ZWMZSpoint.Point[i].Value == 0 || ZWMZSpoint.Point[i].Value == -1) {
+                                var tmppointcontentzwm = curpointzwm.Point.slice(lastEndingzwm, i);
+                                curpointzwm.Point = tmppointcontentzwm;
+                                curpointzwm.Color = "rgb(244, 55, 244)";
+                                lastEndingzwm = i + 1;
+                                line2.Draw.DrawData.push(curpointzwm);
+                                curpointzwm = JSON.parse(JSON.stringify(ZWMZSpoint));
+                            }
+                        }
+
+                        RXXDpoint.Color = "rgb(255, 0, 0)";
+                        line3.Draw.DrawData.push(RXXDpoint);
+
+                        var apiData =
+                        {
+                            code: 0,
+                            stock: { name: hqchart.Name, symbol: hqchart.Symbol },
+                            outdata: { date: kData.GetDate(), outvar: [line1,line2,line3] }
+                        };
+
+                        console.log('[NetworkFilter::NetworkFilter] apiData ', apiData);
+                        callback(apiData);
+                    }).catch(function(error) {
+                        console.error('指标数据加载失败:', error);
                     });
-
-                    var lastEnding = 0;
-                    let curpoint;
-                    curpoint = JSON.parse(JSON.stringify(ZSpoint));
-                    //line2.Draw.LineWidth = 2;
-
-                    //画ZSFLZS
-                    for (i = 0; i < ZSpoint.Point.length; i++) {
-                        if (ZSpoint.Point[i].Value == 0) {
-                            var tmppointcontent = curpoint.Point.slice(lastEnding, i);
-                            curpoint.Point = tmppointcontent;
-                            curpoint.Color = "rgb(244, 0, 0)";
-                            lastEnding = i + 1;
-                            line2.Draw.DrawData.push(curpoint);
-                            let curppoint;
-                            curpoint = JSON.parse(JSON.stringify(ZSpoint));
-                        }
-                        else if (ZSpoint.Point[i].Value == -1) {
-                            var tmppointcontent = curpoint.Point.slice(lastEnding, i);
-                            curpoint.Point = tmppointcontent;
-                            curpoint.Color = "rgb(0, 244, 0)";
-                            lastEnding = i + 1;
-                            line2.Draw.DrawData.push(curpoint);
-                            let curppoint;
-                            curpoint = JSON.parse(JSON.stringify(ZSpoint));
-                        }
-                    }
-
-
-                    //画F30XD数据：
-                    $.ajax({
-                        type: "get",
-                        url: "https://zettathings.top/public/F30XD/" + symbol + ".json",
-                        dataType: "json",
-                        async: false,
-                        success: function (data) {
-                            XDpoint = data;
-                        }
-                    });
-                    XDpoint.Color = "rgb(255, 255, 0)";
-                    line1.Draw.DrawData.push(XDpoint);
-
-
-                    var ZWMZSpoint;
-                    var symbol = getURLParams('symbol');
-                    if (symbol == null) symbol = '002981.sz';
-                    //取回ZWMZS数据：
-                    $.ajax({
-                        type: "get",
-                        url: "https://zettathings.top/public/ZWMZS/" + symbol + ".json",
-                        //url: "http://localhost:8081/ZWMZS/" + symbol + ".json",
-
-                        dataType: "json",
-                        async: false,
-                        success: function (data) {
-                            ZWMZSpoint = data;
-                        }
-                    });
-
-                    var lastEndingzwm = 0;
-                    let curpointzwm;
-                    curpointzwm = JSON.parse(JSON.stringify(ZWMZSpoint));
-
-                    //line2.Draw.LineWidth = 2;
-                    //画ZWMZS
-                    for (i = 0; i < ZWMZSpoint.Point.length; i++) {
-                        if (ZWMZSpoint.Point[i].Value == 0) {
-                            var tmppointcontentzwm = curpointzwm.Point.slice(lastEndingzwm, i);
-                            curpointzwm.Point = tmppointcontentzwm;
-                            curpointzwm.Color = "rgb(244, 55, 244)";
-                            lastEndingzwm = i + 1;
-                            line2.Draw.DrawData.push(curpointzwm);
-                            let curppointzwm;
-                            curpointzwm = JSON.parse(JSON.stringify(ZWMZSpoint));
-                        }
-                        else if (ZWMZSpoint.Point[i].Value == -1) {
-                            var tmppointcontentzwm = curpointzwm.Point.slice(lastEndingzwm, i);
-                            curpointzwm.Point = tmppointcontentzwm;
-                            curpointzwm.Color = "rgb(244, 55, 244)";
-                            lastEndingzwm = i + 1;
-                            line2.Draw.DrawData.push(curpointzwm);
-                            let curppointzwm;
-                            curpointzwm = JSON.parse(JSON.stringify(ZWMZSpoint));
-                        }
-                    }
-
-                    //画RXXD数据：
-                    $.ajax({
-                        type: "get",
-                        url: "https://zettathings.top/public/RXXD/" + symbol + ".json",
-                        //url: "http://localhost:8081/RXXD/" + symbol + ".json",
-                        dataType: "json",
-                        async: false,
-                        success: function (data) {
-                            XDpoint = data;
-                        }
-                    });
-
-                    XDpoint.Color = "rgb(255, 0, 0)";
-                    //line3.Draw.LineWidth = 3;
-                    line3.Draw.DrawData.push(XDpoint);
-
-
-                    var apiData =
-                    {
-                        code: 0,
-                        stock: { name: hqchart.Name, symbol: hqchart.Symbol },
-                        outdata: { date: kData.GetDate(), outvar: [line1,line2,line3] }
-                    };
-
-                    data.PreventDefault = true;
-                    console.log('[NetworkFilter::NetworkFilter] apiData ', apiData);
-                    callback(apiData);
                 }
             }
             else if (data.Name == 'JSSymbolData::GetCustomVariantData') {
