@@ -132,12 +132,12 @@
          * 异步分页获取全部K线数据（核心分页逻辑）
          * - 单次请求 640 根
          * - 总量上限约 2000 根
-         * - 每次请求间隔 600ms 防止限流
+         * - 每次请求间隔 250ms（腾讯接口仅 3~4 次请求，缩短整体等待）
          */
         function fetchAllKlinePaged(fullSymbol, period, adj, callback) {
             var MAX_TOTAL = 2000;
             var PAGE_SIZE = 640;
-            var REQUEST_INTERVAL = 600; // ms，满足 ≤2 QPS
+            var REQUEST_INTERVAL = 250; // ms，缩小翻页等待，降低首屏总耗时
             var allKlines = [];
             var endDate = ''; // 第一次为空，从最新开始
             var requestCount = 0;
@@ -362,13 +362,14 @@
                 }
             }
             else if (data.Name == 'JSSymbolData::GetCustomVariantData') {
-                this.GetCustomVariantData(data, callback) = function (data, callback) {
-                    var hqchartData = { Data: [], DataType: 0 };
-                    hqchartData.Data.push({ Date: 20201205, Value: 15 });
-                    hqchartData.Data.push({ Date: 20210105, Value: 10 });
-                    hqchartData.Data.push({ Date: 20210107, Value: 20 });
-                    callback(hqchartData);
-                }
+                // 修复：原始代码把一个匿名函数赋值给了函数调用的结果（非法左值），
+                // 运行时会抛错且 this 指向不确定。这里改为直接构造数据并通过 callback 返回。
+                data.PreventDefault = true;
+                var hqchartData = { Data: [], DataType: 0 };
+                hqchartData.Data.push({ Date: 20201205, Value: 15 });
+                hqchartData.Data.push({ Date: 20210105, Value: 10 });
+                hqchartData.Data.push({ Date: 20210107, Value: 20 });
+                callback(hqchartData);
             }
         }
 
