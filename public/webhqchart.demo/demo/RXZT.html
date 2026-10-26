@@ -44,7 +44,13 @@
             return null;
         }
 
-        $(window).resize(resizeCanvas);
+        // resize 防抖：避免拖动窗口/移动端旋转时高频触发 OnSize
+        var resizeTimer = null;
+        function onWindowResize() {
+            if (resizeTimer) clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(resizeCanvas, 150);
+        }
+        $(window).resize(onWindowResize);
 
         function resizeCanvas() {
             var height = $(window).height();
