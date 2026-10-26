@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+api/
+public/webhqchart.demo/jscommon/eastmoney-proxy.js

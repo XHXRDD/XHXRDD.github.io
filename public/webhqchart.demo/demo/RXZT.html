@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">  
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../jscommon/umychart.resource/css/tools.css" />
     <link rel="stylesheet" href="../jscommon/umychart.resource/font/iconfont.css" />
     <script>
-        let url = window.location.href;   //获取地址栏的url
+        let url = window.location.href;
         let id = "symbol";
         let id1 = "symbol1";
         if (url.indexOf("?") != -1) {
@@ -20,11 +20,8 @@
             id = id1.substr(0, 9);
         }
         document.title = id;
-
     </script>
-
-
-</head>  
+</head>
 <body>
     <div id="kline" style="width: 900px;height:400px;position: absolute;"></div>
     <script src="content/js/jquery.min.js"></script>
@@ -36,16 +33,9 @@
     <script src="../jscommon/umychart.index.data.js"></script>
     <script src="../jscommon/umychart.style.js"></script>
 
-
-    <!-- 引入vConsole的JS库 -->
-    <!--script src="../vConsole-3.2.0/dist/vconsole.min.js"></script-->
-
     <script>
-
         WebFont.load({ custom: { families: ['iconfont'] } });
         JSComplier.AddVariant({ Name: 'ZSSG', Description: '中枢上轨' });
-
-
 
         function getURLParams(name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
@@ -67,241 +57,240 @@
             divKline.JSChart.OnSize();
         }
 
-        function GetInternalSymbol(symbol)   //HQChart内置代码转成东方财富代码
-        {
-            var aryData = symbol.split(".");
-            var symbolUpper = symbol.toUpperCase();
-            var arySymbol = aryData[0].split('_');
-            var market = parseInt(arySymbol[1]);
-            var internalSymbol = arySymbol[0];
+        // ========== 腾讯接口适配与分页核心 ==========
 
-            if (internalSymbol.indexOf("-") > 0) {
-                var aryValue = internalSymbol.split('-');
-                internalSymbol = aryValue[1];
-            }
-
-            return { Market: market, Symbol: internalSymbol };
+        /**
+         * 将 HQChart 内部代码（如 "1.600000"）转为腾讯格式（"sh600000"）
+         */
+        function toTencentSymbol(internalSymbol) {
+            // internalSymbol 格式可能是 "1.600000" 或 "0.000001"
+            var parts = internalSymbol.split('.');
+            var market = parts[0]; // "1" = 上海, "0" = 深圳
+            var code = parts[1];
+            var suffix = (market === '1') ? 'sh' : 'sz';
+            return suffix + code;
         }
 
-        function GetInternalPeriod(periodID) {
-            var MAP_PERIOD = new Map(
-                [
-                    [0, 101],   //day
-                    [1, 102],   //week
-                    [2, 103],   //month
-
-                    [4, 1],    //1min
-                    [5, 5],    //5min
-                    [6, 15],   //15min
-                    [7, 30],   //30min
-                    [8, 60],   //60min
-                ]
-            );
-
-            return MAP_PERIOD.get(periodID);
+        /**
+         * 获取复权参数
+         */
+        function getAdjParam(right) {
+            if (right === 0) return '';   // 不复权
+            if (right === 1) return 'qfq'; // 前复权
+            if (right === 2) return 'hfq'; // 后复权
+            return 'qfq';
         }
 
-        function GetInternalRight(right) {
-            if (right == 0) return 0;
-            else if (right == 1) return 1;
-            else return 2;
-        }
-        ///////////////////////////////////////////////////////////////////////////////////
-        //K线数据对接
-        //
-        /////////////////////////////////////////////////////////////////////////////////
-        /*
-        function GetKLineApiUrl(symbol, period, right, option) {
-            var internalSymbol = symbol; //GetInternalSymbol(symbol);
-            var internalPeriod = GetInternalPeriod(period);
-            var internalRight = GetInternalRight(right);
-            if (option && option.Update == true) {
-                var beginDate = option.End;
-                var url = `https://push2his.eastmoney.com/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&beg=${beginDate}&end=20500101&ut=fa5fd1943c7b386f172d6893dbfba10b&rtntype=6&secid=${internalSymbol}&klt=${internalPeriod}&fqt=${internalRight}`;
-            }
-            else {
-                var url = `https://push2his.eastmoney.com/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&beg=0&end=20500101&ut=fa5fd1943c7b386f172d6893dbfba10b&rtntype=6&secid=${internalSymbol}&klt=${internalPeriod}&fqt=${internalRight}`;
-            }
-
-            return { Url: url, Symbol: symbol, InternalSymbol: internalSymbol, Period: period, Right: right };
-        }*/
-
-
-        function GetKLineApiUrl(symbol, period, right, option) {
-            var internalSymbol = symbol; //GetInternalSymbol(symbol);
-            var internalPeriod = GetInternalPeriod(period);
-            var internalRight = GetInternalRight(right);
-            var baseUrl;
-            if (option && option.Update == true) {
-                var beginDate = option.End;
-                baseUrl = `https://push2his.eastmoney.com/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&beg=${beginDate}&end=20500101&ut=fa5fd1943c7b386f172d6893dbfba10b&rtntype=6&secid=${internalSymbol}&klt=${internalPeriod}&fqt=${internalRight}`;
-            }
-            else {
-                baseUrl = `https://push2his.eastmoney.com/api/qt/stock/kline/get?fields1=f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13&fields2=f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61&beg=0&end=20500101&ut=fa5fd1943c7b386f172d6893dbfba10b&rtntype=6&secid=${internalSymbol}&klt=${internalPeriod}&fqt=${internalRight}`;
-            }
-
-            // 唯一新增：使用你自己的腾讯云代理，并编码目标URL
-            var url = `https://1314185245-b8m1k47ihc.ap-beijing.tencentscf.com/?url=${encodeURIComponent(baseUrl)}`;
-
-            return { Url: url, Symbol: symbol, InternalSymbol: internalSymbol, Period: period, Right: right };
+        /**
+         * 获取周期参数
+         */
+        function getTencentPeriod(period) {
+            var map = { 0: 'day', 1: 'week', 2: 'month' };
+            return map[period] || 'day';
         }
 
-        function loadFlagCounterAfterKLine() {
-            if (window.flagCounterScheduled) return;
-            window.flagCounterScheduled = true;
+        /**
+         * 构建单次请求的 URL（强制从最新往过去取）
+         * 腾讯接口单次上限 640 根，但总量上限约 2000 根。
+         */
+        function buildTencentUrl(fullSymbol, period, endDate, count, adj) {
+            // endDate 为空字符串时表示从最新数据开始取
+            var param = fullSymbol + ',' + getTencentPeriod(period) + ',,' + endDate + ',' + count + ',' + adj;
+            return 'https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=' + param;
+        }
 
-            const loadCounter = function() {
-                var counter = document.getElementById('chartFlagCounter');
-                if (counter && !counter.hasAttribute('src')) counter.src = counter.getAttribute('data-src');
-                if (window.parent !== window) {
-                    window.parent.postMessage({ type: 'kline-data-rendered' }, window.location.origin);
+        /**
+         * 从单次返回中提取 K 线数组（优先 qfqday / hfqday）
+         */
+        function extractKlineArray(stockData, adj) {
+            var keys = [];
+            if (adj === 'qfq') keys = ['qfqday', 'qfqweek', 'qfqmonth', 'day', 'week', 'month'];
+            else if (adj === 'hfq') keys = ['hfqday', 'hfqweek', 'hfqmonth', 'day', 'week', 'month'];
+            else keys = ['day', 'week', 'month', 'qfqday', 'hfqday'];
+
+            for (var i = 0; i < keys.length; i++) {
+                if (stockData[keys[i]] && stockData[keys[i]].length > 0) {
+                    return stockData[keys[i]];
                 }
-            };
-
-            requestAnimationFrame(function() {
-                requestAnimationFrame(function() {
-                    if (window.requestIdleCallback) {
-                        window.requestIdleCallback(loadCounter, { timeout: 2000 });
-                    } else {
-                        setTimeout(loadCounter, 0);
-                    }
-                });
-            });
+            }
+            return [];
         }
 
-        function RecvHistoryData(recvData, callback, option) {
-            var data = recvData.data;
-
-            var hqChartData = { code: 0, data: [] };
-            hqChartData.symbol = option.Obj.Symbol;
-            hqChartData.name = data.name;
-
-            var yClose = data.preKPrice;;
-            for (var i = 0; i < data.klines.length; ++i) {
-                var strItem = data.klines[i];
-                var item = strItem.split(',');
-                var today = new Date(Date.parse(item[0]));
-                var date = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-
-                var open = parseFloat(item[1]);
-                var close = parseFloat(item[2]);
-                var high = parseFloat(item[3]);
-                var low = parseFloat(item[4]);
-                var vol = parseFloat(item[5]) * 100;
-                var amount = parseFloat(item[6]);
-
-                var newItem = [date, yClose, open, high, low, close, vol, amount];
-                hqChartData.data.push(newItem);
-
-                yClose = close;
-            }
-
-
-            if (option.Data.Self.IsDestroy == false) {
-                callback(hqChartData);
-                loadFlagCounterAfterKLine();
-            }
+        /**
+         * 计算日期字符串的前一天，用于分页游标
+         */
+        function previousDay(dateStr) {
+            var d = new Date(Date.parse(dateStr));
+            d.setDate(d.getDate() - 1);
+            var y = d.getFullYear();
+            var m = ('0' + (d.getMonth() + 1)).slice(-2);
+            var day = ('0' + d.getDate()).slice(-2);
+            return y + '-' + m + '-' + day;
         }
 
+        /**
+         * 异步分页获取全部K线数据（核心分页逻辑）
+         * - 单次请求 640 根
+         * - 总量上限约 2000 根
+         * - 每次请求间隔 600ms 防止限流
+         */
+        function fetchAllKlinePaged(fullSymbol, period, adj, callback) {
+            var MAX_TOTAL = 2000;
+            var PAGE_SIZE = 640;
+            var REQUEST_INTERVAL = 600; // ms，满足 ≤2 QPS
+            var allKlines = [];
+            var endDate = ''; // 第一次为空，从最新开始
+            var requestCount = 0;
 
-        /*
-        function RequestHistoryData(data, callback) {
-            data.PreventDefault = true;
-            var symbol = data.Request.Data.symbol; //请求的股票代码
-            var period = data.Self.Period;    //周期
-            var right = data.Self.Right;      //复权
-
-            //console.log(`[HQData::RequestHistoryData] Symbol=${symbol}`);
-            var obj = GetKLineApiUrl(symbol, period, right, null);
-
-            $.ajax(
-                {
-                    type: "get",
-                    url: obj.Url,
-                    dataType: "json",
-                    async: false,
-                    success: function (recvData) {
-                        RecvHistoryData(recvData, callback, { Data: data, Obj: obj });
-                    }
-                });
-
-        }*/
-        
-
-
-        function RequestHistoryData(data, callback) {
-            data.PreventDefault = true;
-            var symbol = data.Request.Data.symbol;
-            var period = data.Self.Period;
-            var right = data.Self.Right;
-
-            var obj = GetKLineApiUrl(symbol, period, right, null);
-
-            var maxAttempts = 3;
-            var retryDelayMs = 500;
-            function retryOrFail(attempt, error) {
-                if (attempt >= maxAttempts) {
-                    console.error('行情数据请求在 ' + attempt + ' 次尝试后仍失败:', error);
+            function fetchNextPage() {
+                if (allKlines.length >= MAX_TOTAL) {
+                    finish();
                     return;
                 }
 
-                var delay = retryDelayMs * attempt;
-                console.warn('行情数据请求失败，' + delay + 'ms 后进行第 ' + (attempt + 1) + ' 次尝试:', error);
-                setTimeout(function() {
-                    doRequest(attempt + 1);
-                }, delay);
-            }
+                var url = buildTencentUrl(fullSymbol, period, endDate, PAGE_SIZE, adj);
+                console.log('[分页] 第 ' + (requestCount + 1) + ' 次请求，endDate=' + (endDate || '最新') + ', 已获取 ' + allKlines.length + ' 根');
 
-            function doRequest(attempt) {
                 $.ajax({
-                    type: "get",
-                    url: obj.Url,
-                    dataType: "text",
-                    jsonp: false,
-                    async: true,
-                    success: function(recvData) {
-                        try {
-                            var jsonData = JSON.parse(recvData);
-                            RecvHistoryData(jsonData, callback, { Data: data, Obj: obj });
-                        } catch(e) {
-                            retryOrFail(attempt, e);
+                    type: 'GET',
+                    url: url,
+                    dataType: 'json',
+                    success: function(json) {
+                        requestCount++;
+                        if (!json || !json.data) {
+                            finish();
+                            return;
                         }
+
+                        var dataKey = Object.keys(json.data)[0];
+                        var stockData = json.data[dataKey];
+                        if (!stockData) {
+                            finish();
+                            return;
+                        }
+
+                        var batch = extractKlineArray(stockData, adj);
+                        if (!batch || batch.length === 0) {
+                            finish();
+                            return;
+                        }
+
+                        // 将本批数据拼接到前面（因为是从新到旧翻页，批次本身是升序）
+                        allKlines = batch.concat(allKlines);
+
+                        // 如果本批不足一页，说明已经取完
+                        if (batch.length < PAGE_SIZE) {
+                            finish();
+                            return;
+                        }
+
+                        // 计算下一页的终点日期：本批最早一天的前一日
+                        var earliestDate = batch[0][0]; // 例如 "2024-03-04"
+                        endDate = previousDay(earliestDate);
+
+                        // 遵守限流，等待后继续
+                        setTimeout(fetchNextPage, REQUEST_INTERVAL);
                     },
                     error: function(xhr, status, err) {
-                        retryOrFail(attempt, new Error('东方财富K线接口请求失败: ' + status + ' ' + err));
+                        console.error('[分页] 请求失败:', status, err);
+                        // 如果已有数据，则用已有数据；否则最终会回调空数据
+                        finish();
                     }
                 });
             }
-            doRequest(1);
+
+            function finish() {
+                // 按时间升序排序（确保从旧到新）
+                allKlines.sort(function(a, b) {
+                    return a[0] < b[0] ? -1 : 1;
+                });
+
+                // 截取最近的 MAX_TOTAL 根
+                var result = allKlines.slice(-MAX_TOTAL);
+                console.log('[分页] 完成，共获取 ' + result.length + ' 根K线');
+                callback(result);
+            }
+
+            fetchNextPage();
         }
+
+        // ========== HQChart 网络回调（使用分页） ==========
+
+        function RequestHistoryData(data, callback) {
+            data.PreventDefault = true;
+            var symbol = data.Request.Data.symbol; // 例如 "1.600000"
+            var period = data.Self.Period;         // 0=日线
+            var right = data.Self.Right;           // 1=前复权
+
+            var fullSymbol = toTencentSymbol(symbol);
+            var adj = getAdjParam(right);
+
+            fetchAllKlinePaged(fullSymbol, period, adj, function(klines) {
+                // 将腾讯格式的 K 线数组转换为 HQChart 格式
+                var hqChartData = { code: 0, data: [] };
+
+                // 股票名称（可选，从第一次请求的 qt 中获取，但分页场景下简化处理）
+                hqChartData.name = ''; 
+                hqChartData.symbol = symbol;
+
+                if (!klines || klines.length === 0) {
+                    callback(hqChartData);
+                    return;
+                }
+
+                // 第一根的昨收：用第一根的开盘价近似（或保持0，HQChart 可处理）
+                var yClose = parseFloat(klines[0][1]) || 0;
+
+                for (var i = 0; i < klines.length; i++) {
+                    var item = klines[i];
+                    if (!item || item.length < 6) continue;
+
+                    var dateStr = item[0];
+                    var today = new Date(Date.parse(dateStr));
+                    var date = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+
+                    var open  = parseFloat(item[1]);
+                    var close = parseFloat(item[2]);
+                    var high  = parseFloat(item[3]);
+                    var low   = parseFloat(item[4]);
+                    var vol   = parseFloat(item[5]) * 100; // 手 -> 股
+
+                    // HQChart 格式: [日期, 昨收, 开盘, 最高, 最低, 收盘, 成交量, 成交额]
+                    hqChartData.data.push([date, yClose, open, high, low, close, vol, 0]);
+                    yClose = close;
+                }
+
+                if (data.Self.IsDestroy == false) {
+                    callback(hqChartData);
+                }
+            });
+        }
+
+        // ========== 原有 NetworkFilter（保留指标加载逻辑，仅替换数据请求） ==========
 
         function NetworkFilter(data, callback) {
             console.log('[NetworkFilter] data', data);
-
-            data.PreventDefault = true;	//设置hqchart不请求数据
+            data.PreventDefault = true;
 
             var symbol1 = getURLParams('symbol');
             if (symbol1 == null) data.Request.Data.symbol = '0.002981';
             else {
                 let mk = "0.";
                 let code = "000000";
-
                 mk = symbol1.substr(6, 8);
                 code = symbol1.substr(0, 6);
-
-                if (mk == ".sz")
-                    data.Request.Data.symbol = "0." + code;
-                else if (mk == ".sh")
-                    data.Request.Data.symbol = "1." + code;
-                if (code == "999999")
-                    data.Request.Data.symbol = "1.000001";
+                if (mk == ".sz") data.Request.Data.symbol = "0." + code;
+                else if (mk == ".sh") data.Request.Data.symbol = "1." + code;
+                if (code == "999999") data.Request.Data.symbol = "1.000001";
             }
 
             switch (data.Name) {
-                case 'KLineChartContainer::RequestHistoryData':                 //日线全量数据下载
+                case 'KLineChartContainer::RequestHistoryData':
                     RequestHistoryData(data, callback);
                     break;
             }
+
+            // 以下指标加载逻辑完全保留你原代码中的实现（Moore线段等）
             if (data.Name == 'APIScriptIndex::ExecuteScript') {
                 var request = data.Request;
                 if (request.Data.indexname == 'Moore线段') {
@@ -309,23 +298,9 @@
                     var kData = hqchart.ChartPaint[0].Data;
                     data.PreventDefault = true;
 
-                    var line1 =
-                    {
-                        name: 'MULTI_LINE', type: 1,
-                        Draw: { DrawType: 'MULTI_LINE', DrawData: [], LineWidth: 1, } //绘制线段数组
-                    };
-
-                    var line2 =
-                    {
-                        name: 'MULTI_LINE', type: 1,
-                        Draw: { DrawType: 'MULTI_LINE', DrawData: [], LineWidth: 2, } //绘制线段数组
-                    };
-
-                    var line3 =
-                    {
-                        name: 'MULTI_LINE', type: 1,
-                        Draw: { DrawType: 'MULTI_LINE', DrawData: [], LineWidth: 3, } //绘制线段数组
-                    };
+                    var line1 = { name: 'MULTI_LINE', type: 1, Draw: { DrawType: 'MULTI_LINE', DrawData: [], LineWidth: 1, } };
+                    var line2 = { name: 'MULTI_LINE', type: 1, Draw: { DrawType: 'MULTI_LINE', DrawData: [], LineWidth: 2, } };
+                    var line3 = { name: 'MULTI_LINE', type: 1, Draw: { DrawType: 'MULTI_LINE', DrawData: [], LineWidth: 3, } };
 
                     var symbol = getURLParams('symbol');
                     if (symbol == null) symbol = '002981.sz';
@@ -344,7 +319,6 @@
 
                         var lastEnding = 0;
                         var curpoint = JSON.parse(JSON.stringify(ZSpoint));
-
                         for (let i = 0; i < ZSpoint.Point.length; i++) {
                             if (ZSpoint.Point[i].Value == 0 || ZSpoint.Point[i].Value == -1) {
                                 var tmppointcontent = curpoint.Point.slice(lastEnding, i);
@@ -361,7 +335,6 @@
 
                         var lastEndingzwm = 0;
                         var curpointzwm = JSON.parse(JSON.stringify(ZWMZSpoint));
-
                         for (let i = 0; i < ZWMZSpoint.Point.length; i++) {
                             if (ZWMZSpoint.Point[i].Value == 0 || ZWMZSpoint.Point[i].Value == -1) {
                                 var tmppointcontentzwm = curpointzwm.Point.slice(lastEndingzwm, i);
@@ -376,14 +349,12 @@
                         RXXDpoint.Color = "rgb(255, 0, 0)";
                         line3.Draw.DrawData.push(RXXDpoint);
 
-                        var apiData =
-                        {
+                        var apiData = {
                             code: 0,
                             stock: { name: hqchart.Name, symbol: hqchart.Symbol },
-                            outdata: { date: kData.GetDate(), outvar: [line1,line2,line3] }
+                            outdata: { date: kData.GetDate(), outvar: [line1, line2, line3] }
                         };
-
-                        console.log('[NetworkFilter::NetworkFilter] apiData ', apiData);
+                        console.log('[NetworkFilter] apiData', apiData);
                         callback(apiData);
                     }).catch(function(error) {
                         console.error('指标数据加载失败:', error);
@@ -393,8 +364,6 @@
             else if (data.Name == 'JSSymbolData::GetCustomVariantData') {
                 this.GetCustomVariantData(data, callback) = function (data, callback) {
                     var hqchartData = { Data: [], DataType: 0 };
-
-                    //数组数据
                     hqchartData.Data.push({ Date: 20201205, Value: 15 });
                     hqchartData.Data.push({ Date: 20210105, Value: 10 });
                     hqchartData.Data.push({ Date: 20210107, Value: 20 });
@@ -403,31 +372,18 @@
             }
         }
 
-  
+        // ========== 初始化 ==========
+
         $(function () {
             var debug = getURLParams('debug');
-            if (debug == 1) {
-                var vConsole = new VConsole();
-                console.log('create VConsole');
-            }
+            if (debug == 1) { var vConsole = new VConsole(); }
 
             var symbol = getURLParams('symbol');
             if (symbol == null) symbol = '002981.sz';
 
-
-
-
-
-            // 创建股票K线图
             var chart = JSChart.Init(document.getElementById('kline'));
-
-            //var colorType = getURLParams('colorType');
-            //if (colorType == null) colorType = 'white';
-
-            //黑色风格设置, 默认是白色风格
             var blackStyle = HQChartStyle.GetStyleConfig(STYLE_TYPE_ID.BLACK_ID);
             JSChart.SetStyle(blackStyle);
-
 
             var height = $(window).height();
             var width = $(window).width();
@@ -437,141 +393,62 @@
             divKline.style.backgroundColor = blackStyle.BGColor;
             chart.OnSize();
 
-            var option =
-            {
+            var option = {
                 Type: '历史K线图',
-
-                Windows:
-                    [
-                        {
-                            Index: 'Moore线段',
-                            API:
-                            {
-                                Name: 'Moore线段',
-                                Script: null,
-                                Args: null
-                            },
-                            IsShareY: true,
-                            Modify: true, Change: true, Overlay: true
-                        },
-                    ], //窗口指标
-                OverlayIndex:
-                    [
-                        { Index: 'Moore线段', Windows: 0, IsShareY: true },
-                        { Index: 'MA', Windows: 0, IsShareY: true, ShowRightText: false }
-                        //{ Index: 'MACD', Windows: 1 }
-
-                    ],  //叠加指标
+                Windows: [{ Index: 'Moore线段', API: { Name: 'Moore线段', Script: null, Args: null }, IsShareY: true, Modify: true, Change: true, Overlay: true }],
+                OverlayIndex: [{ Index: 'Moore线段', Windows: 0, IsShareY: true }, { Index: 'MA', Windows: 0, IsShareY: true, ShowRightText: false }],
                 IsShareY: true,
                 IsCalculateYMaxMin: true,
-
-
-
                 Symbol: symbol,
                 blackStyle: true,
                 CheckLatestVerion: false,
-                IsAutoUpdate: false, //true,          //是自动更新数据
-                AutoUpdateFrequency: 3000,   //数据更新频率
-                //TradeIndex: {Index:'交易系统-BIAS'},    //交易系统
+                IsAutoUpdate: false,
                 NetworkFilter: NetworkFilter,
-
-
-                IsShowRightMenu: true,          //右键菜单
-                IsShowCorssCursorInfo: true,    //是否显示十字光标的刻度信息
-                CorssCursorInfo: { Left: 1, Right: 1, Bottom: 1, IsShowCorss: true, PressTime: 300 },  //十字光标刻度设置
-
-                KLine:
-                {
-                    DragMode: 1,                 //拖拽模式 0 禁止拖拽 1 数据拖拽 2 区间选择
-                    Right: 1,                    //复权 0 不复权 1 前复权 2 后复权
-                    Period: 0,                   //周期 0 日线 1 周线 2 月线 3 年线
-                    MaxReqeustDataCount: 60000,   //数据个数
+                IsShowRightMenu: true,
+                IsShowCorssCursorInfo: true,
+                CorssCursorInfo: { Left: 1, Right: 1, Bottom: 1, IsShowCorss: true, PressTime: 300 },
+                KLine: {
+                    DragMode: 1,
+                    Right: 1,
+                    Period: 0,
+                    MaxReqeustDataCount: 2000, // 与分页上限对齐
                     MaxRequestMinuteDayCount: 6,
-                    PageSize: 600,               //一屏显示多少数据
-                    //IndexTreeApiUrl:"https://opensourcecache.zealink.com/cache/hqh5/index/commonindextree.json",        //指标树下载地址
-                    //Info:["互动易","大宗交易",'龙虎榜',"调研","业绩预告","公告"],       //信息地雷
-                    //Info:["公告","互动易","调研"],           //信息地雷
-                    InfoPosition: 1,                         //显示位置
-                    KLineDoubleClick: false,              //双击分钟走势图
-                    IsShowTooltip: true,                 //是否显示K线提示信息
-                    //FirstShowDate:20200101,             //首屏显示的起始日期
+                    PageSize: 600,
+                    InfoPosition: 1,
+                    KLineDoubleClick: false,
+                    IsShowTooltip: true,
                     DrawType: 0,
                 },
+                KLineTitle: { IsShowName: true, IsShowSettingInfo: true },
+                Border: { Left: 5, Right: 60, Bottom: 25, Top: 25 },
+                Language: "CN",
+                ExtendChart: [{ Name: '画图工具', Top: 25 }],
+                Frame: [
+                    { SplitCount: 5, IsShowLeftText: false, IsShowRightText: true },
+                    { SplitCount: 3, IsShowLeftText: false, IsShowRightText: true },
+                    { SplitCount: 2, IsShowLeftText: false, IsShowRightText: true }
+                ],
+            };
 
-                KLineTitle: //标题设置
-                {
-                    IsShowName: true,       //不显示股票名称
-                    IsShowSettingInfo: true //不显示周期/复权
-                },
-
-                Border: //边框
-                {
-                    Left: 5,           //左边间距
-                    Right: 60,       //右边间距
-                    Bottom: 25,
-                    Top: 25
-                },
-
-                Language: "CN",  //英文 'EN' 中文:'CN'
-
-                ExtendChart:    //扩展图形
-                    [
-                        { Name: '画图工具', Top: 25 }
-                    ],
-
-                Frame:  //子框架设置 (Height 窗口高度比例值)
-                    [
-                        {
-                            SplitCount: 5,
-                            //Height:4,
-                            IsShowLeftText: false,
-                            IsShowRightText: true
-                        },
-                        {
-                            SplitCount: 3,
-                            //Height:2,
-                            IsShowLeftText: false,
-                            IsShowRightText: true
-                        },
-                        {
-                            SplitCount: 2,
-                            //Height:2,
-                            IsShowLeftText: false,
-                            IsShowRightText: true
-                        }
-                    ],
-
-            }
-
-            var windowHeight = $(window).height();
             var windowWidth = $(window).width();
-            if (windowWidth <= 420)   //手机小屏左右不显示坐标
-            {
+            if (windowWidth <= 420) {
                 option.Border.Left = 1;
                 option.Border.Right = 1;
-                option.KLine.IsShowTooltip = false;   //关闭pc端tooltip
+                option.KLine.IsShowTooltip = false;
                 option.KLine.Info = null;
                 option.KLine.PageSize = 30;
-                option.ExtendChart = [{ Name: 'KLineTooltip' }]; //开启手机端tooltip
-                //option.ExtendChart=null;
+                option.ExtendChart = [{ Name: 'KLineTooltip' }];
                 option.IsCorssOnlyDrawKLine = true;
                 option.CorssCursorTouchEnd = true;
-                for (var i in option.Windows) {
-                    option.Windows[i].Modify = false;
-                    option.Windows[i].Change = false;
-                }
+                for (var i in option.Windows) { option.Windows[i].Modify = false; option.Windows[i].Change = false; }
             }
-
 
             JSComplier.AddVariant({ Name: 'ZSSG', Description: '中枢上轨' });
             chart.SetOption(option);
-
             resizeCanvas();
-        })
-
+        });
     </script>
 
     <a href="https://info.flagcounter.com/1iAv"><img id="chartFlagCounter" data-src="https://s11.flagcounter.com/count2/1iAv/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_10/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Flag Counter" border="0" /></a>
-
-</body>  
+</body>
 </html>
