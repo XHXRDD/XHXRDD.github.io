@@ -239,6 +239,20 @@
             .history-section { margin: 0.2rem 0.8rem; }
             .chart-container { margin: 0.2rem 0.5rem; min-height: calc(100vh - 180px); }
         }
+        /* P2: 移动端性能优化 —— 关闭 backdrop-filter，使用 dvh 适配移动浏览器工具栏 */
+        @media (max-width: 680px) {
+            .navbar, .search-section, .history-section, .loading-overlay, .toast-msg {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+        }
+        /* dvh 渐进增强：支持动态视口高度时覆盖，旧浏览器自动回退到 vh */
+        @supports (height: 100dvh) {
+            .chart-container { min-height: calc(100dvh - 140px); }
+            @media (max-width: 680px) {
+                .chart-container { min-height: calc(100dvh - 180px); }
+            }
+        }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css">
 </head>
