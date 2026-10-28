@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -44,7 +44,6 @@
             return null;
         }
 
-        // resize 防抖：避免拖动窗口/移动端旋转时高频触发 OnSize
         var resizeTimer = null;
         function onWindowResize() {
             if (resizeTimer) clearTimeout(resizeTimer);
@@ -65,49 +64,31 @@
 
         // ========== 腾讯接口适配与分页核心 ==========
 
-        /**
-         * 将 HQChart 内部代码（如 "1.600000"）转为腾讯格式（"sh600000"）
-         */
         function toTencentSymbol(internalSymbol) {
-            // internalSymbol 格式可能是 "1.600000" 或 "0.000001"
             var parts = internalSymbol.split('.');
-            var market = parts[0]; // "1" = 上海, "0" = 深圳
+            var market = parts[0];
             var code = parts[1];
             var suffix = (market === '1') ? 'sh' : 'sz';
             return suffix + code;
         }
 
-        /**
-         * 获取复权参数
-         */
         function getAdjParam(right) {
-            if (right === 0) return '';   // 不复权
-            if (right === 1) return 'qfq'; // 前复权
-            if (right === 2) return 'hfq'; // 后复权
+            if (right === 0) return '';
+            if (right === 1) return 'qfq';
+            if (right === 2) return 'hfq';
             return 'qfq';
         }
 
-        /**
-         * 获取周期参数
-         */
         function getTencentPeriod(period) {
             var map = { 0: 'day', 1: 'week', 2: 'month' };
             return map[period] || 'day';
         }
 
-        /**
-         * 构建单次请求的 URL（强制从最新往过去取）
-         * 腾讯接口单次上限 640 根，但总量上限约 2000 根。
-         */
         function buildTencentUrl(fullSymbol, period, endDate, count, adj) {
-            // endDate 为空字符串时表示从最新数据开始取
             var param = fullSymbol + ',' + getTencentPeriod(period) + ',,' + endDate + ',' + count + ',' + adj;
             return 'https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=' + param;
         }
 
-        /**
-         * 从单次返回中提取 K 线数组（优先 qfqday / hfqday）
-         */
         function extractKlineArray(stockData, adj) {
             var keys = [];
             if (adj === 'qfq') keys = ['qfqday', 'qfqweek', 'qfqmonth', 'day', 'week', 'month'];
@@ -122,9 +103,6 @@
             return [];
         }
 
-        /**
-         * 计算日期字符串的前一天，用于分页游标
-         */
         function previousDay(dateStr) {
             var d = new Date(Date.parse(dateStr));
             d.setDate(d.getDate() - 1);
@@ -134,18 +112,12 @@
             return y + '-' + m + '-' + day;
         }
 
-        /**
-         * 异步分页获取全部K线数据（核心分页逻辑）
-         * - 单次请求 640 根
-         * - 总量上限约 2000 根
-         * - 每次请求间隔 250ms（腾讯接口仅 3~4 次请求，缩短整体等待）
-         */
         function fetchAllKlinePaged(fullSymbol, period, adj, callback) {
             var MAX_TOTAL = 2000;
             var PAGE_SIZE = 640;
-            var REQUEST_INTERVAL = 250; // ms，缩小翻页等待，降低首屏总耗时
+            var REQUEST_INTERVAL = 250;
             var allKlines = [];
-            var endDate = ''; // 第一次为空，从最新开始
+            var endDate = '';
             var requestCount = 0;
 
             function fetchNextPage() {
@@ -181,37 +153,30 @@
                             return;
                         }
 
-                        // 将本批数据拼接到前面（因为是从新到旧翻页，批次本身是升序）
                         allKlines = batch.concat(allKlines);
 
-                        // 如果本批不足一页，说明已经取完
                         if (batch.length < PAGE_SIZE) {
                             finish();
                             return;
                         }
 
-                        // 计算下一页的终点日期：本批最早一天的前一日
-                        var earliestDate = batch[0][0]; // 例如 "2024-03-04"
+                        var earliestDate = batch[0][0];
                         endDate = previousDay(earliestDate);
 
-                        // 遵守限流，等待后继续
                         setTimeout(fetchNextPage, REQUEST_INTERVAL);
                     },
                     error: function(xhr, status, err) {
                         console.error('[分页] 请求失败:', status, err);
-                        // 如果已有数据，则用已有数据；否则最终会回调空数据
                         finish();
                     }
                 });
             }
 
             function finish() {
-                // 按时间升序排序（确保从旧到新）
                 allKlines.sort(function(a, b) {
                     return a[0] < b[0] ? -1 : 1;
                 });
 
-                // 截取最近的 MAX_TOTAL 根
                 var result = allKlines.slice(-MAX_TOTAL);
                 console.log('[分页] 完成，共获取 ' + result.length + ' 根K线');
                 callback(result);
@@ -220,31 +185,61 @@
             fetchNextPage();
         }
 
+        // ========== FlagCounter 延迟加载 + 通知父页面 ==========
+        // 说明：K线数据渲染完成后才加载统计图片，避免拖慢首屏。
+        // 同时向父页面 postMessage，让父页面也延迟加载自己的 FlagCounter。
+        // ========== FlagCounter 延迟加载 + 通知父页面 ==========
+        // 简化触发链：直接 setTimeout 300ms，避免 requestIdleCallback 在 iframe 中被延迟/跳过
+        function loadFlagCounterAfterKLine() {
+            // 同一页面生命周期内只执行一次（iframe 每次切换股票会带新时间戳重新加载，变量自然重置）
+            if (window.flagCounterScheduled) return;
+            window.flagCounterScheduled = true;
+
+            setTimeout(function() {
+                var counter = document.getElementById('chartFlagCounter');
+                if (counter && !counter.hasAttribute('src')) {
+                    counter.src = counter.getAttribute('data-src');
+                    console.log('[FlagCounter] 内部统计已触发加载:', counter.src);
+                } else if (counter) {
+                    console.log('[FlagCounter] 内部统计已有 src，跳过');
+                } else {
+                    console.warn('[FlagCounter] 找不到 chartFlagCounter 元素');
+                }
+                // 通知父页面
+                if (window.parent !== window) {
+                    try {
+                        window.parent.postMessage({ type: 'kline-data-rendered' }, window.location.origin);
+                        console.log('[FlagCounter] 已向父页面发送 kline-data-rendered');
+                    } catch (e) {
+                        console.warn('[FlagCounter] postMessage 失败:', e);
+                    }
+                }
+            }, 300);
+        }
+
         // ========== HQChart 网络回调（使用分页） ==========
 
         function RequestHistoryData(data, callback) {
             data.PreventDefault = true;
-            var symbol = data.Request.Data.symbol; // 例如 "1.600000"
-            var period = data.Self.Period;         // 0=日线
-            var right = data.Self.Right;           // 1=前复权
+            var symbol = data.Request.Data.symbol;
+            var period = data.Self.Period;
+            var right = data.Self.Right;
 
             var fullSymbol = toTencentSymbol(symbol);
             var adj = getAdjParam(right);
 
             fetchAllKlinePaged(fullSymbol, period, adj, function(klines) {
-                // 将腾讯格式的 K 线数组转换为 HQChart 格式
                 var hqChartData = { code: 0, data: [] };
-
-                // 股票名称（可选，从第一次请求的 qt 中获取，但分页场景下简化处理）
-                hqChartData.name = ''; 
+                hqChartData.name = '';
                 hqChartData.symbol = symbol;
 
                 if (!klines || klines.length === 0) {
                     callback(hqChartData);
+                    // 即使没有数据，页面也已展示，仍触发 FlagCounter
+                    loadFlagCounterAfterKLine();
                     return;
                 }
 
-                // 第一根的昨收：用第一根的开盘价近似（或保持0，HQChart 可处理）
                 var yClose = parseFloat(klines[0][1]) || 0;
 
                 for (var i = 0; i < klines.length; i++) {
@@ -259,20 +254,21 @@
                     var close = parseFloat(item[2]);
                     var high  = parseFloat(item[3]);
                     var low   = parseFloat(item[4]);
-                    var vol   = parseFloat(item[5]) * 100; // 手 -> 股
+                    var vol   = parseFloat(item[5]) * 100;
 
-                    // HQChart 格式: [日期, 昨收, 开盘, 最高, 最低, 收盘, 成交量, 成交额]
                     hqChartData.data.push([date, yClose, open, high, low, close, vol, 0]);
                     yClose = close;
                 }
 
                 if (data.Self.IsDestroy == false) {
                     callback(hqChartData);
+                    // 关键修复：数据加载完成后，加载 FlagCounter 并通知父页面
+                    loadFlagCounterAfterKLine();
                 }
             });
         }
 
-        // ========== 原有 NetworkFilter（保留指标加载逻辑，仅替换数据请求） ==========
+        // ========== NetworkFilter（保留指标加载逻辑） ==========
 
         function NetworkFilter(data, callback) {
             console.log('[NetworkFilter] data', data);
@@ -296,7 +292,6 @@
                     break;
             }
 
-            // 以下指标加载逻辑完全保留你原代码中的实现（Moore线段等）
             if (data.Name == 'APIScriptIndex::ExecuteScript') {
                 var request = data.Request;
                 if (request.Data.indexname == 'Moore线段') {
@@ -368,8 +363,6 @@
                 }
             }
             else if (data.Name == 'JSSymbolData::GetCustomVariantData') {
-                // 修复：原始代码把一个匿名函数赋值给了函数调用的结果（非法左值），
-                // 运行时会抛错且 this 指向不确定。这里改为直接构造数据并通过 callback 返回。
                 data.PreventDefault = true;
                 var hqchartData = { Data: [], DataType: 0 };
                 hqchartData.Data.push({ Date: 20201205, Value: 15 });
@@ -418,7 +411,7 @@
                     DragMode: 1,
                     Right: 1,
                     Period: 0,
-                    MaxReqeustDataCount: 2000, // 与分页上限对齐
+                    MaxReqeustDataCount: 2000,
                     MaxRequestMinuteDayCount: 6,
                     PageSize: 600,
                     InfoPosition: 1,

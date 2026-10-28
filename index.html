@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -302,23 +302,56 @@
         let loadingOverlay = document.getElementById('loadingOverlay');
         let historyTagsContainer = document.getElementById('historyTags');
 
+        // ========== FlagCounter 父页面加载逻辑 ==========
+        // 核心函数：加载父页面的 FlagCounter 图片
         function loadPageFlagCounter() {
             const counter = document.getElementById('pageFlagCounter');
-            if (!counter || counter.hasAttribute('src')) return;
+            if (!counter) return;
+            if (counter.hasAttribute('src')) return; // 已加载过，跳过
             counter.src = counter.dataset.src;
+            console.log('[父页面 FlagCounter] 已触发加载:', counter.src);
         }
 
+        // ---- 方式一：监听 iframe 的 postMessage（放宽条件） ----
+        // 关键改动：不再强制校验 event.source === currentFrame.contentWindow
+        // 因为 iframe 切换股票后会重新加载，contentWindow 会变成新对象，导致严格校验失败。
+        // 现在只校验来源域名和消息类型，即可可靠收到消息。
         window.addEventListener('message', (event) => {
-            if (event.origin !== new URL(currentFrame.src).origin ||
-                event.source !== currentFrame.contentWindow ||
-                !event.data || event.data.type !== 'kline-data-rendered') return;
+            // 只接受来自本站的消息
+            if (event.origin !== 'https://zettathings.top') return;
+            if (!event.data || event.data.type !== 'kline-data-rendered') return;
 
+            console.log('[父页面] 收到 iframe 的 kline-data-rendered 消息');
             if ('requestIdleCallback' in window) {
                 window.requestIdleCallback(loadPageFlagCounter, { timeout: 2000 });
             } else {
                 setTimeout(loadPageFlagCounter, 0);
             }
         });
+
+        // ---- 方式二：滚动兜底（彻底不依赖 iframe 消息） ----
+        // 用户向下滚动、FlagCounter 进入可视区域附近时，自动加载。
+        // 这一层兜底能确保即使 postMessage 因任何原因失败，父页面的统计也能正常工作。
+        let scrollCounterBound = false;
+        function bindScrollFallback() {
+            if (scrollCounterBound) return;
+            scrollCounterBound = true;
+
+            const checkAndLoad = () => {
+                const counter = document.getElementById('pageFlagCounter');
+                if (!counter || counter.hasAttribute('src')) return;
+                const rect = counter.getBoundingClientRect();
+                // 元素进入视口下方 200px 内即视为“接近可见”，提前加载
+                if (rect.top < window.innerHeight + 200) {
+                    loadPageFlagCounter();
+                }
+            };
+
+            window.addEventListener('scroll', checkAndLoad, { passive: true });
+            // 首次也检查一次（页面很短时可能根本不需要滚动）
+            setTimeout(checkAndLoad, 1000);
+        }
+        bindScrollFallback();
 
         // ----- 工具函数 -----
         function showMessage(msg, isError = false) {
@@ -376,14 +409,14 @@
             }
             const symbolFull = code + marketSuffix;
             const targetUrl = `https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?symbol=${symbolFull}&v=${Date.now()}`;
-            
+
             // 更新 iframe（带动画）
             setIframeSrc(targetUrl);
-            
+
             const displayName = stockName ? `${stockName} ${code}` : `${code} (${marketType})`;
             stockLabel.innerHTML = `📈 当前: ${displayName}`;
             showMessage(`✅ 已切换至 ${displayName}`, false);
-            
+
             // 保存到历史记录（若需要）
             if (saveToHistory) {
                 addToHistory({ code: code, name: stockName || code });
@@ -394,7 +427,7 @@
         // ----- 历史记录管理 (localStorage) -----
         const HISTORY_KEY = 'recent_stocks';
         const MAX_HISTORY = 5;
-        
+
         function getHistory() {
             const stored = localStorage.getItem(HISTORY_KEY);
             if (stored) {
@@ -404,12 +437,12 @@
             }
             return [];
         }
-        
+
         function saveHistory(history) {
             localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, MAX_HISTORY)));
             renderHistoryTags();
         }
-        
+
         function addToHistory(stock) {
             if (!stock || !stock.code) return;
             let history = getHistory();
@@ -420,7 +453,7 @@
             if (history.length > MAX_HISTORY) history.pop();
             saveHistory(history);
         }
-        
+
         function renderHistoryTags() {
             if (!historyTagsContainer) return;
             const history = getHistory();
@@ -442,11 +475,11 @@
                 });
             });
         }
-        
+
         // ----- 股票列表缓存（24小时有效）-----
         const CACHE_KEY = 'stock_list_cache';
         const CACHE_EXPIRE = 24 * 60 * 60 * 1000; // 24小时
-        
+
         async function fetchStockListWithCache() {
             const cached = localStorage.getItem(CACHE_KEY);
             if (cached) {
@@ -470,7 +503,7 @@
             showMessage('✅ 股票列表已更新并缓存', false);
             return data;
         }
-        
+
         // ----- autoComplete 初始化 -----
         let autoCompleteJS = null;
         const initAutoComplete = async () => {
@@ -566,7 +599,7 @@
                 }
             });
         }
-        
+
         // 初始时加载一次历史记录，并确保当前显示的股票也加入历史（上证指数）
         window.addEventListener('load', () => {
             // 将默认的上证指数也记录到历史中（如果还没有）
