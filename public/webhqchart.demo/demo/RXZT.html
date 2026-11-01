@@ -16,8 +16,6 @@
     <link rel="preload" href="../jscommon/umychart.complier.js" as="script" />
     <link rel="preload" href="../jscommon/umychart.index.data.js" as="script" />
     <link rel="preload" href="../jscommon/umychart.style.js" as="script" />
-    <link rel="stylesheet" href="../jscommon/umychart.resource/css/tools.css" />
-    <link rel="stylesheet" href="../jscommon/umychart.resource/font/iconfont.css" />
     <script>
         let url = window.location.href;
         let id = "symbol";
@@ -28,7 +26,41 @@
             id = id1.substr(0, 9);
         }
         document.title = id;
+
+        window.MooreIndicatorDataBySymbol = {};
+        function GetMooreIndicatorData(symbol) {
+            if (!window.MooreIndicatorDataBySymbol[symbol]) {
+                var indicatorTypes = ['ZSFLZS', 'F30XD', 'ZWMZS', 'RXXD'];
+                var dataPromise = Promise.all(indicatorTypes.map(function(type) {
+                    return fetch('https://zettathings.top/public/' + type + '/' + encodeURIComponent(symbol) + '.json')
+                        .then(function(response) {
+                            if (!response.ok) throw new Error(type + ' 请求失败: HTTP ' + response.status);
+                            return response.json();
+                        });
+                }));
+                dataPromise.catch(function() {});
+                window.MooreIndicatorDataBySymbol[symbol] = dataPromise;
+            }
+            return window.MooreIndicatorDataBySymbol[symbol];
+        }
+
+        function CloneIndicatorSegment(source, start, end, color) {
+            var segment = {};
+            Object.keys(source).forEach(function(key) {
+                if (key !== 'Point') segment[key] = JSON.parse(JSON.stringify(source[key]));
+            });
+            segment.Point = source.Point.slice(start, end).map(function(point) {
+                return JSON.parse(JSON.stringify(point));
+            });
+            segment.Color = color;
+            return segment;
+        }
+
+        var initialSymbol = new URLSearchParams(window.location.search).get('symbol') || '002981.sz';
+        GetMooreIndicatorData(initialSymbol);
     </script>
+    <link rel="stylesheet" href="../jscommon/umychart.resource/css/tools.css" />
+    <link rel="stylesheet" href="../jscommon/umychart.resource/font/iconfont.css" />
 </head>
 <body>
     <div id="kline" style="width: 900px;height:400px;position: absolute;"></div>
@@ -313,29 +345,19 @@
 
                     var symbol = getURLParams('symbol');
                     if (symbol == null) symbol = '002981.sz';
-                    const indicatorTypes = ['ZSFLZS', 'F30XD', 'ZWMZS', 'RXXD'];
-                    Promise.all(indicatorTypes.map(function(type) {
-                        return fetch('https://zettathings.top/public/' + type + '/' + symbol + '.json')
-                            .then(function(response) {
-                                if (!response.ok) throw new Error(type + ' 请求失败: HTTP ' + response.status);
-                                return response.json();
-                            });
-                    })).then(function(indicatorData) {
+                    GetMooreIndicatorData(symbol).then(function(indicatorData) {
                         var ZSpoint = indicatorData[0];
                         var XDpoint = indicatorData[1];
                         var ZWMZSpoint = indicatorData[2];
                         var RXXDpoint = indicatorData[3];
 
                         var lastEnding = 0;
-                        var curpoint = JSON.parse(JSON.stringify(ZSpoint));
                         for (let i = 0; i < ZSpoint.Point.length; i++) {
                             if (ZSpoint.Point[i].Value == 0 || ZSpoint.Point[i].Value == -1) {
-                                var tmppointcontent = curpoint.Point.slice(lastEnding, i);
-                                curpoint.Point = tmppointcontent;
-                                curpoint.Color = ZSpoint.Point[i].Value == 0 ? "rgb(244, 0, 0)" : "rgb(0, 244, 0)";
+                                var color = ZSpoint.Point[i].Value == 0 ? "rgb(244, 0, 0)" : "rgb(0, 244, 0)";
+                                var curpoint = CloneIndicatorSegment(ZSpoint, lastEnding, i, color);
                                 lastEnding = i + 1;
                                 line2.Draw.DrawData.push(curpoint);
-                                curpoint = JSON.parse(JSON.stringify(ZSpoint));
                             }
                         }
 
@@ -343,15 +365,11 @@
                         line1.Draw.DrawData.push(XDpoint);
 
                         var lastEndingzwm = 0;
-                        var curpointzwm = JSON.parse(JSON.stringify(ZWMZSpoint));
                         for (let i = 0; i < ZWMZSpoint.Point.length; i++) {
                             if (ZWMZSpoint.Point[i].Value == 0 || ZWMZSpoint.Point[i].Value == -1) {
-                                var tmppointcontentzwm = curpointzwm.Point.slice(lastEndingzwm, i);
-                                curpointzwm.Point = tmppointcontentzwm;
-                                curpointzwm.Color = "rgb(244, 55, 244)";
+                                var curpointzwm = CloneIndicatorSegment(ZWMZSpoint, lastEndingzwm, i, "rgb(244, 55, 244)");
                                 lastEndingzwm = i + 1;
                                 line2.Draw.DrawData.push(curpointzwm);
-                                curpointzwm = JSON.parse(JSON.stringify(ZWMZSpoint));
                             }
                         }
 
