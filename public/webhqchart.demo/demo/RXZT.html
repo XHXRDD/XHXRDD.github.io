@@ -225,6 +225,22 @@
             fetchNextPage();
         }
 
+        var klineDataRendered = false;
+        var klineRequestId = Number(new URLSearchParams(window.location.search).get('requestId') || 0);
+        var klineParentOrigin = document.referrer ? new URL(document.referrer).origin : window.location.origin;
+
+        function notifyParentKlineRendered() {
+            if (window.parent === window) return;
+            window.parent.postMessage({ type: 'kline-data-rendered', requestId: klineRequestId }, klineParentOrigin);
+        }
+
+        window.addEventListener('message', function(event) {
+            if (event.source !== window.parent) return;
+            if (!event.data || event.data.type !== 'kline-ready-check') return;
+            if (event.data.requestId !== klineRequestId || !klineDataRendered) return;
+            notifyParentKlineRendered();
+        });
+
         // ========== FlagCounter 延迟加载 + 通知父页面 ==========
         // 说明：K线数据渲染完成后才加载统计图片，避免拖慢首屏。
         // 同时向父页面 postMessage，让父页面也延迟加载自己的 FlagCounter。
@@ -234,6 +250,8 @@
             // 同一页面生命周期内只执行一次（iframe 每次切换股票会带新时间戳重新加载，变量自然重置）
             if (window.flagCounterScheduled) return;
             window.flagCounterScheduled = true;
+            klineDataRendered = true;
+            notifyParentKlineRendered();
 
             setTimeout(function() {
                 var counter = document.getElementById('chartFlagCounter');
@@ -244,16 +262,6 @@
                     console.log('[FlagCounter] 内部统计已有 src，跳过');
                 } else {
                     console.warn('[FlagCounter] 找不到 chartFlagCounter 元素');
-                }
-                // 通知父页面
-                if (window.parent !== window) {
-                    try {
-                        var requestId = Number(new URLSearchParams(window.location.search).get('requestId') || 0);
-                        window.parent.postMessage({ type: 'kline-data-rendered', requestId: requestId }, window.location.origin);
-                        console.log('[FlagCounter] 已向父页面发送 kline-data-rendered');
-                    } catch (e) {
-                        console.warn('[FlagCounter] postMessage 失败:', e);
-                    }
                 }
             }, 300);
         }

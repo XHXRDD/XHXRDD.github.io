@@ -318,6 +318,7 @@
         let loadingOverlay = document.getElementById('loadingOverlay');
         let historyTagsContainer = document.getElementById('historyTags');
         let iframeLoadTimeout = null;
+        let iframeReadyCheckTimer = null;
         let iframeLoadRequestId = 0;
         let iframeLoading = true;
 
@@ -331,14 +332,37 @@
             console.log('[父页面 FlagCounter] 已触发加载:', counter.src);
         }
 
-        // 通过来源窗口和请求编号校验就绪通知，避免旧 iframe 文档的延迟消息关闭新图表的遮罩。
+        function stopIframeReadyChecks() {
+            if (iframeReadyCheckTimer) {
+                clearInterval(iframeReadyCheckTimer);
+                iframeReadyCheckTimer = null;
+            }
+        }
+
+        function sendIframeReadyCheck(requestId) {
+            if (requestId !== iframeLoadRequestId || !iframeLoading) {
+                stopIframeReadyChecks();
+                return;
+            }
+
+            const targetOrigin = new URL(currentFrame.src, window.location.href).origin;
+            currentFrame.contentWindow.postMessage({ type: 'kline-ready-check', requestId }, targetOrigin);
+        }
+
+        function startIframeReadyChecks(requestId) {
+            stopIframeReadyChecks();
+            sendIframeReadyCheck(requestId);
+            iframeReadyCheckTimer = setInterval(() => sendIframeReadyCheck(requestId), 1000);
+        }
+
+        // Check the sender, origin, and request id so delayed messages cannot hide a newer chart's overlay.
         window.addEventListener('message', (event) => {
-            // 只接受来自本站的消息
-            if (event.origin !== 'https://zettathings.top') return;
+            if (event.origin !== new URL(currentFrame.src, window.location.href).origin) return;
             if (event.source !== currentFrame.contentWindow) return;
             if (!event.data || event.data.type !== 'kline-data-rendered') return;
             if (event.data.requestId !== iframeLoadRequestId) return;
 
+            stopIframeReadyChecks();
             showLoading(false);
             if (iframeLoadTimeout) {
                 clearTimeout(iframeLoadTimeout);
@@ -396,11 +420,12 @@
         function startIframeLoadTimeout(requestId) {
             iframeLoadTimeout = setTimeout(() => {
                 if (requestId === iframeLoadRequestId && iframeLoading) {
+                    stopIframeReadyChecks();
                     showLoading(false);
                     iframeLoadTimeout = null;
                     showMessage('K线加载超时，请重新选择股票', true);
                 }
-            }, 30000);
+            }, 90000);
         }
 
         // 加载 iframe 并处理 loading 状态
@@ -413,9 +438,11 @@
             targetUrl.searchParams.set('requestId', String(requestId));
             currentFrame.src = targetUrl.href;
             startIframeLoadTimeout(requestId);
+            startIframeReadyChecks(requestId);
         }
 
         startIframeLoadTimeout(iframeLoadRequestId);
+        startIframeReadyChecks(iframeLoadRequestId);
 
         const chartContainer = document.getElementById('chartContainer');
         function sizeChartToViewport() {
