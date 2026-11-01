@@ -296,7 +296,7 @@
     <div id="historyTags" style="display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
 </div>
 <div class="chart-container" id="chartContainer">
-    <iframe id="stockChartFrame" src="https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?symbol=999999.sh&v=20240101" title="日K线+缠论线段中枢" loading="eager"></iframe>
+    <iframe id="stockChartFrame" src="https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?symbol=999999.sh&v=20240101&requestId=0" title="日K线+缠论线段中枢" loading="eager"></iframe>
     <div id="loadingOverlay" class="loading-overlay">
         <div class="spinner"></div>
         <div class="loading-text">加载K线数据中...</div>
@@ -320,10 +320,6 @@
         let iframeLoadTimeout = null;
         let iframeLoadRequestId = 0;
         let iframeLoading = true;
-        let iframeDocumentLoaded = currentFrame.contentDocument && currentFrame.contentDocument.readyState === 'complete';
-        currentFrame.addEventListener('load', () => {
-            iframeDocumentLoaded = true;
-        });
 
         // ========== FlagCounter 父页面加载逻辑 ==========
         // 核心函数：加载父页面的 FlagCounter 图片
@@ -335,15 +331,13 @@
             console.log('[父页面 FlagCounter] 已触发加载:', counter.src);
         }
 
-        // ---- 方式一：监听 iframe 的 postMessage（放宽条件） ----
-        // 关键改动：不再强制校验 event.source === currentFrame.contentWindow
-        // 因为 iframe 切换股票后会重新加载，contentWindow 会变成新对象，导致严格校验失败。
-        // 现在只校验来源域名和消息类型，即可可靠收到消息。
+        // 通过来源窗口和请求编号校验就绪通知，避免旧 iframe 文档的延迟消息关闭新图表的遮罩。
         window.addEventListener('message', (event) => {
             // 只接受来自本站的消息
             if (event.origin !== 'https://zettathings.top') return;
+            if (event.source !== currentFrame.contentWindow) return;
             if (!event.data || event.data.type !== 'kline-data-rendered') return;
-            if (!iframeDocumentLoaded) return;
+            if (event.data.requestId !== iframeLoadRequestId) return;
 
             showLoading(false);
             if (iframeLoadTimeout) {
@@ -414,9 +408,10 @@
             iframeLoadRequestId++;
             const requestId = iframeLoadRequestId;
             if (iframeLoadTimeout) clearTimeout(iframeLoadTimeout);
-            iframeDocumentLoaded = false;
             showLoading(true);
-            currentFrame.src = url;
+            const targetUrl = new URL(url, window.location.href);
+            targetUrl.searchParams.set('requestId', String(requestId));
+            currentFrame.src = targetUrl.href;
             startIframeLoadTimeout(requestId);
         }
 

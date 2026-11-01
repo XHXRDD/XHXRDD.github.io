@@ -248,7 +248,8 @@
                 // 通知父页面
                 if (window.parent !== window) {
                     try {
-                        window.parent.postMessage({ type: 'kline-data-rendered' }, window.location.origin);
+                        var requestId = Number(new URLSearchParams(window.location.search).get('requestId') || 0);
+                        window.parent.postMessage({ type: 'kline-data-rendered', requestId: requestId }, window.location.origin);
                         console.log('[FlagCounter] 已向父页面发送 kline-data-rendered');
                     } catch (e) {
                         console.warn('[FlagCounter] postMessage 失败:', e);
