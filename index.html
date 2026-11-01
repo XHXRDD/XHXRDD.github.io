@@ -105,17 +105,29 @@
             padding: 0.3rem 0.8rem;
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
+            flex: 0 0 auto;
+            flex-wrap: nowrap;
             gap: 0.5rem;
             font-size: 0.7rem;
             color: #8b9bcf;
             background: rgba(18,18,28,0.6);
             border-radius: 2rem;
             backdrop-filter: blur(2px);
+            min-width: 0;
+            overflow: hidden;
         }
         .history-label {
             color: #8b9bcf;
             letter-spacing: 1px;
+            flex: 0 0 auto;
+        }
+        #historyTags {
+            flex: 1 1 auto;
+            flex-wrap: nowrap !important;
+            min-width: 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: thin;
         }
         .history-tag {
             background: #1e2a3a;
@@ -126,6 +138,7 @@
             transition: 0.1s;
             color: #cbd5ff;
             border: 1px solid #2d3a5e;
+            flex: 0 0 auto;
         }
         .history-tag:hover {
             background: #3b82f6;
@@ -134,14 +147,14 @@
         }
         /* K线图容器（相对定位用于loading层） */
         .chart-container {
-            flex: 1 1 auto;
+            flex: 1 1 0;
             margin: 0.2rem 1rem 0.2rem 1rem;
             background: #00000022;
             border-radius: 1rem;
             overflow: hidden;
             border: 1px solid rgba(66, 153, 225, 0.3);
             box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-            min-height: calc(100vh - 140px);
+            min-height: 320px;
             position: relative;
         }
         iframe {
@@ -234,10 +247,16 @@
             border: 1px solid #3b82f6;
         }
         @media (max-width: 680px) {
-            .navbar { padding: 0.4rem 1rem; }
-            .search-section { margin: 0.5rem 0.8rem; flex-direction: column; align-items: stretch; }
-            .history-section { margin: 0.2rem 0.8rem; }
-            .chart-container { margin: 0.2rem 0.5rem; min-height: calc(100vh - 180px); }
+            .navbar { padding: 0.35rem 0.8rem; gap: 0.4rem; }
+            .logo-area h1 { font-size: 1rem; }
+            .nav-links { gap: 0.65rem; }
+            .nav-links a { font-size: 0.75rem; }
+            .search-section { margin: 0.35rem 0.8rem 0.2rem; padding: 0.3rem 0.75rem; gap: 0.5rem; flex-direction: column; align-items: stretch; }
+            .search-wrapper { min-width: 180px; }
+            #autoComplete { padding: 0.5rem 0.9rem; }
+            .search-info { gap: 0.35rem; }
+            .history-section { margin: 0.15rem 0.8rem 0; padding: 0.3rem 0.65rem; }
+            .chart-container { margin: 0.2rem 0.5rem; }
         }
         /* P2: 移动端性能优化 —— 关闭 backdrop-filter，使用 dvh 适配移动浏览器工具栏 */
         @media (max-width: 680px) {
@@ -246,12 +265,9 @@
                 -webkit-backdrop-filter: none !important;
             }
         }
-        /* dvh 渐进增强：支持动态视口高度时覆盖，旧浏览器自动回退到 vh */
+        /* 支持动态地址栏的移动浏览器使用动态视口高度。 */
         @supports (height: 100dvh) {
-            .chart-container { min-height: calc(100dvh - 140px); }
-            @media (max-width: 680px) {
-                .chart-container { min-height: calc(100dvh - 180px); }
-            }
+            body { min-height: 100dvh; }
         }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css">
@@ -280,8 +296,8 @@
     <div id="historyTags" style="display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
 </div>
 <div class="chart-container" id="chartContainer">
-    <iframe id="stockChartFrame" src="https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?symbol=999999.sh&v=20240101" title="日K线+缠论线段中枢" loading="lazy"></iframe>
-    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+    <iframe id="stockChartFrame" src="https://zettathings.top/public/webhqchart.demo/demo/RXZT.html?symbol=999999.sh&v=20240101" title="日K线+缠论线段中枢" loading="eager"></iframe>
+    <div id="loadingOverlay" class="loading-overlay">
         <div class="spinner"></div>
         <div class="loading-text">加载K线数据中...</div>
     </div>
@@ -301,6 +317,13 @@
         let toastEl = document.getElementById('globalToast');
         let loadingOverlay = document.getElementById('loadingOverlay');
         let historyTagsContainer = document.getElementById('historyTags');
+        let iframeLoadTimeout = null;
+        let iframeLoadRequestId = 0;
+        let iframeLoading = true;
+        let iframeDocumentLoaded = currentFrame.contentDocument && currentFrame.contentDocument.readyState === 'complete';
+        currentFrame.addEventListener('load', () => {
+            iframeDocumentLoaded = true;
+        });
 
         // ========== FlagCounter 父页面加载逻辑 ==========
         // 核心函数：加载父页面的 FlagCounter 图片
@@ -320,7 +343,13 @@
             // 只接受来自本站的消息
             if (event.origin !== 'https://zettathings.top') return;
             if (!event.data || event.data.type !== 'kline-data-rendered') return;
+            if (!iframeDocumentLoaded) return;
 
+            showLoading(false);
+            if (iframeLoadTimeout) {
+                clearTimeout(iframeLoadTimeout);
+                iframeLoadTimeout = null;
+            }
             console.log('[父页面] 收到 iframe 的 kline-data-rendered 消息');
             if ('requestIdleCallback' in window) {
                 window.requestIdleCallback(loadPageFlagCounter, { timeout: 2000 });
@@ -366,28 +395,32 @@
         // 显示/隐藏 loading 动画
         function showLoading(show) {
             if (!loadingOverlay) return;
+            iframeLoading = show;
             loadingOverlay.style.display = show ? 'flex' : 'none';
         }
 
+        function startIframeLoadTimeout(requestId) {
+            iframeLoadTimeout = setTimeout(() => {
+                if (requestId === iframeLoadRequestId && iframeLoading) {
+                    showLoading(false);
+                    iframeLoadTimeout = null;
+                    showMessage('K线加载超时，请重新选择股票', true);
+                }
+            }, 30000);
+        }
+
         // 加载 iframe 并处理 loading 状态
-        function setIframeSrc(url, callback) {
+        function setIframeSrc(url) {
+            iframeLoadRequestId++;
+            const requestId = iframeLoadRequestId;
+            if (iframeLoadTimeout) clearTimeout(iframeLoadTimeout);
+            iframeDocumentLoaded = false;
             showLoading(true);
             currentFrame.src = url;
-            // 监听 iframe 加载完成
-            const onLoad = () => {
-                showLoading(false);
-                currentFrame.removeEventListener('load', onLoad);
-                if (callback) callback();
-            };
-            currentFrame.addEventListener('load', onLoad);
-            // 超时保护：10秒后强制隐藏loading
-            setTimeout(() => {
-                if (loadingOverlay && loadingOverlay.style.display === 'flex') {
-                    showLoading(false);
-                    console.warn('iframe 加载超时');
-                }
-            }, 10000);
+            startIframeLoadTimeout(requestId);
         }
+
+        startIframeLoadTimeout(iframeLoadRequestId);
 
         // 核心：切换股票（只更新iframe，不打开新窗口）
         function loadStockKLineInPlace(code, stockName, saveToHistory = true) {
