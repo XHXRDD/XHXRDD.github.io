@@ -147,14 +147,14 @@
         }
         /* K线图容器（相对定位用于loading层） */
         .chart-container {
-            flex: 1 1 0;
+            flex: 1 0 auto;
             margin: 0.2rem 1rem 0.2rem 1rem;
             background: #00000022;
             border-radius: 1rem;
             overflow: hidden;
             border: 1px solid rgba(66, 153, 225, 0.3);
             box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-            min-height: 320px;
+            min-height: max(320px, var(--chart-viewport-height, 320px));
             position: relative;
         }
         iframe {
@@ -421,6 +421,16 @@
         }
 
         startIframeLoadTimeout(iframeLoadRequestId);
+
+        const chartContainer = document.getElementById('chartContainer');
+        function sizeChartToViewport() {
+            const chartDocumentTop = chartContainer.getBoundingClientRect().top + window.scrollY;
+            const availableHeight = window.innerHeight - chartDocumentTop - 8;
+            chartContainer.style.setProperty('--chart-viewport-height', Math.max(320, availableHeight) + 'px');
+        }
+
+        sizeChartToViewport();
+        window.addEventListener('resize', sizeChartToViewport, { passive: true });
 
         // 核心：切换股票（只更新iframe，不打开新窗口）
         function loadStockKLineInPlace(code, stockName, saveToHistory = true) {

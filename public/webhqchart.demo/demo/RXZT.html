@@ -457,6 +457,10 @@
             };
 
             var windowWidth = $(window).width();
+            if (windowWidth <= 640) {
+                option.ExtendChart = [];
+            }
+
             if (windowWidth <= 420) {
                 option.Border.Left = 1;
                 option.Border.Right = 1;
